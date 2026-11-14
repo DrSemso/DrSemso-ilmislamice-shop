@@ -2,7 +2,7 @@
 -- Run in Supabase: SQL editor -> paste -> Run (or `supabase db push`).
 
 create extension if not exists "pgcrypto";
-create extension if not exists "unaccent";
+create extension if not exists "unaccent" with schema extensions;
 
 -- ---------- Catalog ----------
 create table public.categories (
@@ -222,3 +222,6 @@ create policy "admin chat" on public.chat_messages for all using (public.is_admi
 -- ---------- Storage for product images ----------
 insert into storage.buckets (id, name, public) values ('products', 'products', true)
   on conflict (id) do nothing;
+
+-- Trigger-only function: not callable through the API.
+revoke execute on function public.handle_new_user() from public, anon, authenticated;
