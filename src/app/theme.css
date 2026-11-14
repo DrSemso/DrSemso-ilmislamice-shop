@@ -1,0 +1,15 @@
+/* Brand tokens. Change these (and the fonts in src/app/fonts.ts) to re-skin the shop. */
+:root {
+  --paper: #f8f7f3;      /* page background */
+  --ink: #141414;        /* text */
+  --muted: #6b6b6b;      /* secondary text */
+  --surface: #edebe6;    /* hero, panels */
+  --surface-2: #e2dfd8;  /* covers, hover */
+  --line: #d8d4cb;       /* borders */
+  --accent: #a87b45;     /* bronze from the logo */
+  --accent-ink: #ffffff; /* text on accent */
+  --dark: #171614;       /* announcement bar, footer, primary buttons */
+  --on-dark: #f1ede4;    /* text on dark */
+  --success: #2f6b4f;
+  --danger: #a33a2c;
+}
