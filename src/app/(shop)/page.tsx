@@ -25,27 +25,31 @@ export default async function Home() {
   return (
     <>
       {/* Hero */}
-      <section className="bg-surface">
-        <div className="container-x grid items-center gap-12 py-16 md:grid-cols-[1.1fr_1fr] md:py-24">
-          <div>
+      <section className="relative overflow-hidden bg-surface">
+        <div className="container-x relative grid items-center gap-12 py-12 md:grid-cols-[1.1fr_1fr] md:py-24">
+          <div className="relative z-10">
             <p className="eyebrow">{shop.hero.eyebrow}</p>
             <h1 className="mt-4 font-serif text-[clamp(40px,6vw,68px)] font-bold leading-[1.02] tracking-tight">{shop.hero.title}</h1>
             <p className="mt-6 max-w-[48ch] text-[17px] leading-relaxed text-ink/75">{shop.hero.text}</p>
-            <div className="mt-9 flex flex-wrap gap-3">
-              <Link href={shop.hero.primary.href} className="btn btn-dark px-7 py-3.5 text-[15px]">
+            <div className="mt-8 flex flex-wrap gap-3 md:mt-9">
+              <Link href={shop.hero.primary.href} className="btn btn-dark px-5 py-3.5 text-[15px] sm:px-7">
                 {shop.hero.primary.label} <ArrowRight size={16} />
               </Link>
-              <Link href={shop.hero.secondary.href} className="btn btn-outline px-7 py-3.5 text-[15px]">
+              <Link href={shop.hero.secondary.href} className="btn btn-outline px-5 py-3.5 text-[15px] sm:px-7">
                 {shop.hero.secondary.label}
               </Link>
             </div>
           </div>
-          <div className="relative mx-auto aspect-square w-full max-w-[300px] sm:max-w-[460px]" aria-hidden="true">
+          {/* Mobile: a faint watermark behind the text (keeps the hero short). Desktop: the full emblem with books. */}
+          <div
+            className="pointer-events-none absolute -right-20 top-1/2 aspect-square w-[340px] -translate-y-1/2 opacity-[0.22] md:relative md:right-auto md:top-auto md:mx-auto md:w-full md:max-w-[460px] md:translate-y-0 md:opacity-100"
+            aria-hidden="true"
+          >
             <StarMark size={460} ring={false} className="absolute inset-0 h-full w-full text-accent/30" />
             <p className="absolute inset-x-0 top-[17%] text-center font-arabic text-[clamp(44px,7vw,72px)] leading-none text-accent">
               {shop.arabicMark}
             </p>
-            <div className="absolute inset-x-[12%] bottom-[10%] flex items-end justify-center">
+            <div className="absolute inset-x-[12%] bottom-[10%] hidden items-end justify-center md:flex">
               {heroBooks.map((b, i) => (
                 <div
                   key={b.id}
