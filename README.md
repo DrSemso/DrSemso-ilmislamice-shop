@@ -34,14 +34,14 @@ npm run dev                  # http://localhost:3000
 1. Napravite projekat na https://supabase.com (region Frankfurt).
 2. **SQL Editor** → zalijepite cijeli `supabase/migrations/0001_init.sql` → Run. To pravi tabele, pravila pristupa i bucket `products` za slike.
 3. **Authentication → Sign In / Providers → Email**: ostavite uključeno. Prijava ide kodom, lozinke nisu potrebne.
-4. **Authentication → Email Templates → Magic Link**: u tekst ubacite kod, npr.
+4. **Authentication → Emails**: prvo **Set up SMTP** (Resend: host `smtp.resend.com`, port 465, user `resend`, lozinka = Resend API ključ), jer bez vlastitog SMTP-a šabloni se ne mogu mijenjati. Zatim u **Magic Link** i u **Confirm signup** (novi korisnici dobijaju taj) ubacite kod, npr.
    ```html
    <h2>Vaš kod za prijavu</h2>
    <p style="font-size:28px;letter-spacing:6px"><b>{{ .Token }}</b></p>
    <p>Kod važi 1 sat. Ako niste tražili prijavu, zanemarite ovaj e-mail.</p>
    ```
    Bez `{{ .Token }}` korisnik dobija samo link, a ne kod.
-5. **Authentication → SMTP**: povežite Resend SMTP (ugrađeni Supabase mail šalje samo par poruka na sat).
+5. **Authentication → URL Configuration**: Site URL = javna adresa sajta.
 6. **Project Settings → API**: kopirajte `URL`, `anon` i `service_role` ključ u `.env.local`.
 7. (Opciono) primjer kataloga: `node --env-file=.env.local scripts/seed.mjs`.
 
