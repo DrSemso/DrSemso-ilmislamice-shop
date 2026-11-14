@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 import { useCart } from "./cart";
 import { BookCover } from "./book-cover";
-import { convert, currencyForCountry, money, shippingFor } from "@/lib/format";
+import { convert, currencyForCountry, money, shippingFor, shippingLabel } from "@/lib/format";
 import { shop } from "@/shop.config";
 import { placeOrder, type OrderInput } from "@/app/(shop)/narudzba/actions";
 
@@ -136,11 +136,11 @@ export function CheckoutForm({ defaults, loggedIn }: { defaults: Defaults; logge
         </ul>
         <dl className="space-y-2 border-t border-line pt-4 text-[15px]">
           <div className="flex justify-between"><dt>Knjige</dt><dd className="tabular-nums">{money(subtotal, cur)}</dd></div>
-          <div className="flex justify-between"><dt>Dostava</dt><dd className="tabular-nums">{shipping ? money(shipping, cur) : "Besplatna"}</dd></div>
-          <div className="flex justify-between border-t border-line pt-3 text-[18px] font-bold"><dt>Za plaćanje pouzećem</dt><dd className="tabular-nums">{money(subtotal + shipping, cur)}</dd></div>
+          <div className="flex justify-between"><dt>Dostava</dt><dd className="tabular-nums">{shippingLabel(shipping, cur)}</dd></div>
+          <div className="flex justify-between border-t border-line pt-3 text-[18px] font-bold"><dt>Za plaćanje pouzećem</dt><dd className="text-right tabular-nums">{money(subtotal + (shipping ?? 0), cur)}{shipping == null && <span className="block text-[12px] font-normal text-muted">+ dostava</span>}</dd></div>
         </dl>
         <p className="text-[12.5px] text-muted">
-          {cur === "RSD" ? "Za dostavu u Srbiji plaćate u dinarima." : "Za dostavu van Srbije plaćate u eurima."}
+          {cur === "RSD" ? "Za dostavu u Srbiji plaćate u dinarima." : `Za dostavu van Srbije plaćate u eurima. ${shop.shipping.byAgreementNote}`}
         </p>
         {error && <p role="alert" className="rounded-[3px] bg-danger/10 p-3 text-[14px] text-danger">{error}</p>}
         <button disabled={pending} className="btn btn-dark w-full py-3.5 text-[15px]">

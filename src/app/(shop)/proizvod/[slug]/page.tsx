@@ -4,8 +4,8 @@ import Image from "next/image";
 import { notFound } from "next/navigation";
 import { Check, MessageCircle, Truck, X } from "lucide-react";
 import { getProductBySlug, getProducts, getSetItems, getSetsContaining } from "@/lib/data";
-import { discountPercent } from "@/lib/format";
-import { Dual, Price } from "@/components/price";
+import { discountPercent, money } from "@/lib/format";
+import { ByCur, Price } from "@/components/price";
 import { BookCover } from "@/components/book-cover";
 import { AddToCart } from "@/components/add-to-cart";
 import { ProductGrid } from "@/components/product-card";
@@ -139,7 +139,7 @@ export default async function ProductPage({ params }: { params: Params }) {
               <Truck size={18} className="shrink-0 text-accent" />
               <span>
                 Dostava {shop.shipping.deliveryTime}, plaćanje pouzećem.
-                {" "}Besplatna dostava iznad <Dual rsd={shop.shipping.RSD.freeFrom} eur={shop.shipping.EUR.freeFrom} />.
+                {" "}<ByCur rsd={shop.shipping.RSD.freeFrom ? `Besplatna dostava iznad ${money(shop.shipping.RSD.freeFrom, "RSD")}.` : null} eur="Cijena dostave van Srbije je po dogovoru." />
               </span>
             </li>
             <li className="flex gap-3">

@@ -36,7 +36,7 @@ Ne izmišljaj cijene, rokove ni pravila. Na vjerska pitanja koja traže fetvu ne
 
 Činjenice o trgovini:
 - Plaćanje: isključivo pouzećem (kupac plaća kuriru pri preuzimanju).
-- Cijene: u Srbiji u dinarima, za ostale zemlje u eurima (din / ${shop.currency.eurRate}). Dostava: Srbija ${money(shop.shipping.RSD.price, "RSD")} (besplatna iznad ${money(shop.shipping.RSD.freeFrom, "RSD")}), ostale zemlje ${money(shop.shipping.EUR.price, "EUR")} (besplatna iznad ${money(shop.shipping.EUR.freeFrom, "EUR")}); rok ${shop.shipping.deliveryTime}.
+- Cijene: u Srbiji u dinarima, za ostale zemlje u eurima (din / ${shop.currency.eurRate}). Dostava: Srbija ${money(shop.shipping.RSD.price ?? 0, "RSD")} (besplatna iznad ${money(shop.shipping.RSD.freeFrom, "RSD")}), ostale zemlje po dogovoru (prodavnica nazove kupca i kaže cijenu dostave); rok ${shop.shipping.deliveryTime}.
 - Naručivanje je moguće i bez korisničkog računa.
 
 Česta pitanja:

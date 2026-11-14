@@ -21,7 +21,7 @@ export const DEMO_ORDERS: Order[] = [
   {
     id: "00000000-0000-4000-a000-000000001001", number: 1001, user_id: null, email: "amina@primjer.ba", full_name: "Amina Hodžić",
     phone: "+387 61 000 000", address: "Ferhadija 1", city: "Sarajevo", postal_code: "71000", country: "Bosna i Hercegovina",
-    note: "Molim dostavu poslije 16h.", subtotal: 38.5, shipping: 10, total: 48.5, currency: "EUR", payment_method: "pouzece", status: "nova",
+    note: "Molim dostavu poslije 16h.", subtotal: 38.5, shipping: null, total: 38.5, currency: "EUR", payment_method: "pouzece", status: "nova",
     tracking_number: null, created_at: new Date(Date.now() - 3600e3).toISOString(),
     order_items: [
       { id: "i1", order_id: "", product_id: null, title: "Ne tuguj", price: 15, quantity: 1 },

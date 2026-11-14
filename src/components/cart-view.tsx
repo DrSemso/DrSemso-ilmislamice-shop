@@ -4,7 +4,7 @@ import Link from "next/link";
 import { Minus, Plus, Trash2 } from "lucide-react";
 import { useCart } from "./cart";
 import { BookCover } from "./book-cover";
-import { convert, money, shippingFor } from "@/lib/format";
+import { convert, money, shippingFor, shippingLabel } from "@/lib/format";
 import { shop } from "@/shop.config";
 import { ByCur, Dual, Price } from "./price";
 
@@ -71,8 +71,8 @@ export function CartView() {
         <h2 className="font-serif text-[22px] font-bold">Pregled narudžbe</h2>
         <dl className="space-y-2 text-[15px]">
           <div className="flex justify-between"><dt>Knjige</dt><dd className="tabular-nums"><Dual rsd={sub.RSD} eur={sub.EUR} /></dd></div>
-          <div className="flex justify-between"><dt>Dostava</dt><dd className="tabular-nums"><Dual rsd={ship.RSD} eur={ship.EUR} zero="Besplatna" /></dd></div>
-          <div className="flex justify-between border-t border-line pt-3 text-[18px] font-bold"><dt>Ukupno</dt><dd className="tabular-nums"><Dual rsd={sub.RSD + ship.RSD} eur={sub.EUR + ship.EUR} /></dd></div>
+          <div className="flex justify-between"><dt>Dostava</dt><dd className="tabular-nums"><ByCur rsd={shippingLabel(ship.RSD, "RSD")} eur={shippingLabel(ship.EUR, "EUR")} /></dd></div>
+          <div className="flex justify-between border-t border-line pt-3 text-[18px] font-bold"><dt>Ukupno</dt><dd className="text-right tabular-nums"><Dual rsd={sub.RSD + (ship.RSD ?? 0)} eur={sub.EUR + (ship.EUR ?? 0)} /><ByCur rsd={ship.RSD == null ? <span className="block text-[12px] font-normal text-muted">+ dostava</span> : null} eur={ship.EUR == null ? <span className="block text-[12px] font-normal text-muted">+ dostava</span> : null} /></dd></div>
         </dl>
         <p className="text-[13px] text-muted empty:hidden"><ByCur rsd={toFree("RSD")} eur={toFree("EUR")} /></p>
         <p className="text-[13px] text-muted">Plaćanje pouzećem: iznos plaćate kuriru kad paket stigne.</p>

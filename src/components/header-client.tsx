@@ -29,7 +29,21 @@ export function HeaderClient({ subcats }: { subcats: Sub[] }) {
 
   const isActive = (href: string) => pathname === href || pathname.startsWith(href + "/");
 
+  // Lock page scroll and allow Escape while the mobile menu is open.
+  useEffect(() => {
+    if (!mobile) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    const onKey = (e: KeyboardEvent) => e.key === "Escape" && setMobile(false);
+    window.addEventListener("keydown", onKey);
+    return () => {
+      document.body.style.overflow = prev;
+      window.removeEventListener("keydown", onKey);
+    };
+  }, [mobile]);
+
   return (
+    <>
     <header className="sticky top-0 z-40 border-b border-line bg-paper/95 backdrop-blur">
       <div className="container-x flex h-[76px] items-center gap-4">
         <button className="-ml-2 p-2 lg:hidden" aria-label="Otvori meni" onClick={() => setMobile(true)}>
@@ -100,9 +114,11 @@ export function HeaderClient({ subcats }: { subcats: Sub[] }) {
           </li>
         </ul>
       </nav>
+    </header>
 
+      {/* Overlays live outside <header>: its backdrop-blur would trap position:fixed children inside the header box. */}
       {mobile && (
-        <div className="fixed inset-0 z-50 lg:hidden" role="dialog" aria-modal="true" aria-label="Meni">
+        <div className="fixed inset-0 z-[60] lg:hidden" role="dialog" aria-modal="true" aria-label="Meni">
           <div className="absolute inset-0 bg-black/40" onClick={() => setMobile(false)} />
           <div className="absolute inset-y-0 left-0 flex w-[86%] max-w-[360px] flex-col overflow-y-auto bg-paper p-5">
             <div className="mb-6 flex items-center justify-between">
@@ -138,6 +154,6 @@ export function HeaderClient({ subcats }: { subcats: Sub[] }) {
 
       <AccountDialog open={account} onClose={() => setAccount(false)} />
       <AddedToCart />
-    </header>
+    </>
   );
 }

@@ -138,7 +138,7 @@ create table public.orders (
   country text not null,
   note text,
   subtotal numeric(10,2) not null,
-  shipping numeric(10,2) not null,
+  shipping numeric(10,2), -- null = by agreement (outside Serbia)
   total numeric(10,2) not null,
   currency text not null default 'RSD' check (currency in ('RSD', 'EUR')),
   payment_method text not null default 'pouzece',

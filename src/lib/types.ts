@@ -68,7 +68,8 @@ export type Order = {
   country: string;
   note: string | null;
   subtotal: number;
-  shipping: number;
+  /** null = shipping price by agreement (not included in total). */
+  shipping: number | null;
   total: number;
   /** Currency the order is charged in (amounts on the order and its items are in it). */
   currency: "RSD" | "EUR";

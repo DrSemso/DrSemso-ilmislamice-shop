@@ -78,7 +78,7 @@ export async function placeOrder(input: OrderInput): Promise<OrderResult> {
 
   const { data: order, error: oErr } = await db
     .from("orders")
-    .insert({ ...v, note: v.note || null, user_id: session?.user.id ?? null, subtotal, shipping, total: subtotal + shipping, currency })
+    .insert({ ...v, note: v.note || null, user_id: session?.user.id ?? null, subtotal, shipping, total: subtotal + (shipping ?? 0), currency })
     .select("*")
     .single();
   if (oErr || !order) return { ok: false, error: "Narudžba nije poslana, pokušajte ponovo." };
@@ -97,7 +97,7 @@ export async function placeOrder(input: OrderInput): Promise<OrderResult> {
   }
 
   try {
-    await sendOrderEmails({ ...(order as Order), subtotal, shipping, total: subtotal + shipping }, items);
+    await sendOrderEmails({ ...(order as Order), subtotal, shipping, total: subtotal + (shipping ?? 0) }, items);
   } catch (e) {
     console.error("order email", e);
   }

@@ -76,7 +76,7 @@ export default async function AccountPage() {
                     ))}
                   </ul>
                   <p className="mt-3 flex justify-between border-t border-line pt-3 text-[14.5px] font-semibold">
-                    <span>Ukupno (pouzećem)</span><span className="tabular-nums">{money(Number(o.total), o.currency)}</span>
+                    <span>Ukupno (pouzećem)</span><span className="tabular-nums">{money(Number(o.total), o.currency)}{o.shipping == null ? " + dostava" : ""}</span>
                   </p>
                   {o.tracking_number && <p className="mt-2 text-[13.5px] text-muted">Broj pošiljke: {o.tracking_number}</p>}
                 </li>

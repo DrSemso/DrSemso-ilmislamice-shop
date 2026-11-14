@@ -32,12 +32,19 @@ export function discountPercent(price: number, compareAt: number | null) {
   return Math.round((1 - price / compareAt) * 100);
 }
 
-/** Shipping for a subtotal that is already in `cur`. */
-export function shippingFor(subtotal: number, cur: Currency) {
+/** Shipping for a subtotal that is already in `cur`. null = price by agreement (shop calls the customer). */
+export function shippingFor(subtotal: number, cur: Currency): number | null {
   const rule = shop.shipping[cur];
   if (subtotal <= 0) return 0;
+  if (rule.price == null) return null;
   if (rule.freeFrom && subtotal >= rule.freeFrom) return 0;
   return rule.price;
+}
+
+/** "450 din", "Besplatna" or "Po dogovoru". */
+export function shippingLabel(n: number | null, cur: Currency) {
+  if (n == null) return "Po dogovoru";
+  return n === 0 ? "Besplatna" : money(n, cur);
 }
 
 export function slugify(s: string) {
