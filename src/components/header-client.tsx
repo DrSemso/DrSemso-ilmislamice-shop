@@ -17,6 +17,7 @@ export function HeaderClient({ subcats }: { subcats: Sub[] }) {
   const pathname = usePathname();
   const router = useRouter();
   const [mobile, setMobile] = useState(false);
+  const [booksOpen, setBooksOpen] = useState(false);
   const [account, setAccount] = useState(false);
   const [q, setQ] = useState("");
 
@@ -135,13 +136,32 @@ export function HeaderClient({ subcats }: { subcats: Sub[] }) {
             <ul className="divide-y divide-line border-y border-line text-[16px] font-medium">
               {shop.nav.map((item) => (
                 <li key={item.href}>
-                  <Link href={item.href} className="block py-3.5">{item.label}</Link>
-                  {item.href === "/knjige" && (
-                    <ul className="mb-3 ml-3 space-y-2 text-[14.5px] font-normal text-muted">
-                      {subcats.map((c) => (
-                        <li key={c.slug}><Link href={`/kategorija/${c.slug}`}>{c.name}</Link></li>
-                      ))}
-                    </ul>
+                  {item.href === "/knjige" && subcats.length ? (
+                    <>
+                      <div className="flex items-center">
+                        <Link href={item.href} className="block flex-1 py-3.5">{item.label}</Link>
+                        <button
+                          type="button"
+                          className="-mr-2 p-3 text-muted"
+                          aria-expanded={booksOpen}
+                          aria-controls="m-subcats"
+                          aria-label={booksOpen ? "Sakrij podkategorije" : "Prikaži podkategorije"}
+                          onClick={() => setBooksOpen((o) => !o)}
+                        >
+                          <ChevronDown size={18} className={`transition-transform ${booksOpen ? "rotate-180" : ""}`} />
+                        </button>
+                      </div>
+                      {booksOpen && (
+                        <ul id="m-subcats" className="mb-3 ml-3 space-y-1 text-[15px] font-normal text-ink/75">
+                          <li><Link href="/knjige" className="block py-1.5">Sve knjige</Link></li>
+                          {subcats.map((c) => (
+                            <li key={c.slug}><Link href={`/kategorija/${c.slug}`} className="block py-1.5">{c.name}</Link></li>
+                          ))}
+                        </ul>
+                      )}
+                    </>
+                  ) : (
+                    <Link href={item.href} className="block py-3.5">{item.label}</Link>
                   )}
                 </li>
               ))}
