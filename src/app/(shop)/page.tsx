@@ -6,6 +6,7 @@ import { ProductGrid } from "@/components/product-card";
 import { BookCover } from "@/components/book-cover";
 import { StarMark } from "@/components/logo";
 import { Faq } from "@/components/faq";
+import { CategoryTile } from "@/components/category-tile";
 
 export const revalidate = 300;
 
@@ -74,15 +75,9 @@ export default async function Home() {
           <Link href="/knjige" className="text-[14px] font-semibold link">Sve knjige</Link>
         </div>
         <ul className="grid grid-cols-2 gap-3 md:grid-cols-4">
-          {tiles.map((c) => (
+          {tiles.map((c, i) => (
             <li key={c.id}>
-              <Link
-                href={`/kategorija/${c.slug}`}
-                className="group flex h-full min-h-[96px] items-end justify-between gap-3 border border-line bg-white/60 p-5 transition hover:border-ink hover:bg-white"
-              >
-                <span className="font-serif text-[18px] font-semibold leading-tight">{c.name}</span>
-                <ArrowRight size={16} className="shrink-0 text-muted transition group-hover:translate-x-1 group-hover:text-accent" />
-              </Link>
+              <CategoryTile name={c.name} href={`/kategorija/${c.slug}`} index={i} />
             </li>
           ))}
         </ul>
