@@ -5,19 +5,22 @@ import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 import { useCart } from "./cart";
 import { BookCover } from "./book-cover";
-import { price, shippingFor } from "@/lib/format";
+import { convert, currencyForCountry, money, shippingFor } from "@/lib/format";
 import { shop } from "@/shop.config";
 import { placeOrder, type OrderInput } from "@/app/(shop)/narudzba/actions";
 
 type Defaults = Pick<OrderInput, "email" | "full_name" | "phone" | "address" | "city" | "postal_code" | "country">;
 
 export function CheckoutForm({ defaults, loggedIn }: { defaults: Defaults; loggedIn: boolean }) {
-  const { lines, subtotal, clear, setQty, remove } = useCart();
+  const { lines, subtotalIn, clear, setQty, remove } = useCart();
   const router = useRouter();
   const [pending, start] = useTransition();
   const [error, setError] = useState<string | null>(null);
   const [fields, setFields] = useState<Partial<Record<keyof OrderInput, string>>>({});
-  const shipping = shippingFor(subtotal);
+  const [country, setCountry] = useState(defaults.country || shop.shipping.countries[0]);
+  const cur = currencyForCountry(country);
+  const subtotal = subtotalIn(cur);
+  const shipping = shippingFor(subtotal, cur);
 
   if (!lines.length) {
     return (
@@ -91,7 +94,7 @@ export function CheckoutForm({ defaults, loggedIn }: { defaults: Defaults; logge
           {field("city", "Grad", { autoComplete: "address-level2", required: true, className: "sm:col-span-4" })}
           <div className="sm:col-span-6">
             <label htmlFor="co-country" className="label">Država</label>
-            <select id="co-country" name="country" defaultValue={defaults.country} className="input">
+            <select id="co-country" name="country" value={country} onChange={(e) => setCountry(e.target.value)} className="input">
               {shop.shipping.countries.map((c) => <option key={c}>{c}</option>)}
             </select>
             {fields.country && <p className="mt-1 text-[13px] text-danger">{fields.country}</p>}
@@ -127,15 +130,18 @@ export function CheckoutForm({ defaults, loggedIn }: { defaults: Defaults; logge
                 <BookCover product={{ title: l.title, cover_url: l.cover_url, is_set: false, author: l.author ? { name: l.author } : null }} sizes="44px" />
               </div>
               <span className="min-w-0 flex-1">{l.title} <span className="text-muted">× {l.quantity}</span></span>
-              <span className="tabular-nums">{price(l.price * l.quantity)}</span>
+              <span className="tabular-nums">{money(convert(l.price, cur) * l.quantity, cur)}</span>
             </li>
           ))}
         </ul>
         <dl className="space-y-2 border-t border-line pt-4 text-[15px]">
-          <div className="flex justify-between"><dt>Knjige</dt><dd className="tabular-nums">{price(subtotal)}</dd></div>
-          <div className="flex justify-between"><dt>Dostava</dt><dd className="tabular-nums">{shipping ? price(shipping) : "Besplatna"}</dd></div>
-          <div className="flex justify-between border-t border-line pt-3 text-[18px] font-bold"><dt>Za plaćanje pouzećem</dt><dd className="tabular-nums">{price(subtotal + shipping)}</dd></div>
+          <div className="flex justify-between"><dt>Knjige</dt><dd className="tabular-nums">{money(subtotal, cur)}</dd></div>
+          <div className="flex justify-between"><dt>Dostava</dt><dd className="tabular-nums">{shipping ? money(shipping, cur) : "Besplatna"}</dd></div>
+          <div className="flex justify-between border-t border-line pt-3 text-[18px] font-bold"><dt>Za plaćanje pouzećem</dt><dd className="tabular-nums">{money(subtotal + shipping, cur)}</dd></div>
         </dl>
+        <p className="text-[12.5px] text-muted">
+          {cur === "RSD" ? "Za dostavu u Srbiji plaćate u dinarima." : "Za dostavu van Srbije plaćate u eurima."}
+        </p>
         {error && <p role="alert" className="rounded-[3px] bg-danger/10 p-3 text-[14px] text-danger">{error}</p>}
         <button disabled={pending} className="btn btn-dark w-full py-3.5 text-[15px]">
           {pending ? "Šaljem narudžbu…" : "Potvrdi narudžbu"}

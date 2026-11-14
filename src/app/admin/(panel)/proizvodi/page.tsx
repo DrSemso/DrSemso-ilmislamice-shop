@@ -46,7 +46,7 @@ export default async function Page({ searchParams }: { searchParams: SP }) {
                   </Link>
                 </td>
                 <td className="px-5 py-2.5 text-muted">{p.is_set ? "Set knjiga" : p.category?.name ?? "—"}</td>
-                <td className="px-5 py-2.5 text-right tabular-nums">{price(p.price)}</td>
+                <td className="px-5 py-2.5 text-right tabular-nums">{price(p.price, "RSD")}</td>
                 <td className={`px-5 py-2.5 text-right font-semibold tabular-nums ${p.stock === 0 ? "text-danger" : p.stock <= 2 ? "text-accent" : ""}`}>{p.stock}</td>
                 <td className="px-5 py-2.5 text-[12.5px]">
                   <span className="flex flex-wrap gap-1">

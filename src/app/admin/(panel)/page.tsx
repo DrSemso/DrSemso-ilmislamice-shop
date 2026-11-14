@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { adminMessages, adminOrders, adminProducts } from "@/lib/admin-data";
-import { price } from "@/lib/format";
+import { money } from "@/lib/format";
 import { OrderTable } from "@/components/admin/order-table";
 
 export default async function Dashboard() {
@@ -13,7 +13,7 @@ export default async function Dashboard() {
 
   const tiles = [
     { label: "Nove narudžbe", value: String(newOrders.length), href: "/admin/narudzbe?status=nova", hot: newOrders.length > 0 },
-    { label: "Prodaja ovog mjeseca", value: price(month.reduce((s, o) => s + Number(o.total), 0)), sub: `${month.length} narudžbi` },
+    { label: "Prodaja ovog mjeseca", value: (["RSD", "EUR"] as const).map((c) => [c, month.filter((o) => o.currency === c).reduce((s, o) => s + Number(o.total), 0)] as const).filter(([, n]) => n > 0).map(([c, n]) => money(n, c)).join(" + ") || money(0, "RSD"), sub: `${month.length} narudžbi` },
     { label: "Aktivni proizvodi", value: String(products.filter((p) => p.active).length), href: "/admin/proizvodi" },
     { label: "Neodgovorene poruke", value: String(openMessages), href: "/admin/poruke", hot: openMessages > 0 },
   ];

@@ -80,3 +80,10 @@ h1, h2, h3 {
     animation: none !important;
   }
 }
+
+/* Currency: both prices are in the HTML, the visitor's one is shown */
+.cur-eur { display: none; }
+html[data-cur="EUR"] .cur-eur { display: inline; }
+html[data-cur="EUR"] .cur-rsd { display: none; }
+html:not([data-cur="EUR"]) .sw-rsd,
+html[data-cur="EUR"] .sw-eur { opacity: 1; font-weight: 700; }

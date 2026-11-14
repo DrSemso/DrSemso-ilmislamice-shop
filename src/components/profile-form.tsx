@@ -24,7 +24,7 @@ export function ProfileForm({ profile }: { profile: Profile | null }) {
       </div>
       <div>
         <label htmlFor="pf-country" className="label">Država</label>
-        <select id="pf-country" name="country" defaultValue={profile?.country ?? "Bosna i Hercegovina"} className="input">
+        <select id="pf-country" name="country" defaultValue={profile?.country ?? shop.shipping.countries[0]} className="input">
           {shop.shipping.countries.map((c) => <option key={c}>{c}</option>)}
         </select>
       </div>

@@ -3,6 +3,8 @@
 Webshop za islamske knjige: Next.js 15 (App Router) + Supabase (baza, prijava kodom, slike) + Vercel.
 Plaćanje isključivo pouzećem, potvrde narudžbi e-mailom (Resend).
 
+**Valute:** cijene se upisuju u dinarima. Posjetioci iz Srbije vide dinare, svi ostali eure (din / 120, npr. 1.800 din = 15,00 €), a u zaglavlju mogu ručno prebaciti din / €. Narudžba se naplaćuje u dinarima ako je dostava u Srbiju, a inače u eurima. Kurs, dostava po valuti i matična država su u `shop.config.ts` (`currency`, `shipping`).
+
 Bez podešenih ključeva sajt radi u **demo režimu** sa primjerom kataloga (`src/lib/demo-catalog.json`), pa se izgled može pregledati odmah.
 
 ## Šta sajt ima

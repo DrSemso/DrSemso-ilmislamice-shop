@@ -38,7 +38,8 @@ const authors = auths.map(([name, bio]) => ({ id: uuid("aut:" + name), name, slu
 
 const P = (title, o) => ({
   id: uuid("prod:" + title), title, slug: slug(title), description: o.d ?? null,
-  price: o.p, compare_at_price: o.c ?? null, stock: o.s ?? 10, sku: o.sku ?? null, isbn: o.isbn ?? null,
+  // Example prices are written in KM-like units; the shop is priced in dinars (×100, e.g. 18 → 1.800 din = 15 €).
+  price: o.p * 100, compare_at_price: o.c ? o.c * 100 : null, stock: o.s ?? 10, sku: o.sku ?? null, isbn: o.isbn ?? null,
   pages: o.pages ?? null, binding: o.b ?? "Tvrdi uvez", year: o.y ?? 2024, translator: o.t ?? null,
   dimensions: o.dim ?? "17 × 24 cm", cover_url: null, images: [],
   category_id: uuid("cat:" + o.cat), publisher_id: uuid("pub:" + o.pub), author_id: uuid("aut:" + o.a),

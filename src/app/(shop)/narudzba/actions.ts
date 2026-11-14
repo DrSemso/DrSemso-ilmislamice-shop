@@ -3,7 +3,7 @@
 import { isDemo } from "@/lib/env";
 import { getSession } from "@/lib/auth";
 import { createSupabaseAdmin } from "@/lib/supabase/server";
-import { shippingFor } from "@/lib/format";
+import { convert, currencyForCountry, shippingFor } from "@/lib/format";
 import { sendOrderEmails } from "@/lib/email";
 import { shop } from "@/shop.config";
 import type { Order } from "@/lib/types";
@@ -60,24 +60,25 @@ export async function placeOrder(input: OrderInput): Promise<OrderResult> {
     .in("id", lines.map((l) => l.id));
   if (pErr) return { ok: false, error: "Narudžba nije poslana, pokušajte ponovo." };
 
+  const currency = currencyForCountry(v.country);
   const stock: Record<string, number> = {};
   const items = lines.map((l) => {
     const p = products?.find((x) => x.id === l.id);
     if (!p || !p.active) stock[l.id] = 0;
     else if (p.stock < l.quantity) stock[l.id] = p.stock;
-    return { product_id: l.id, title: p?.title ?? "", price: Number(p?.price ?? 0), quantity: l.quantity };
+    return { product_id: l.id, title: p?.title ?? "", price: convert(Number(p?.price ?? 0), currency), quantity: l.quantity };
   });
   if (Object.keys(stock).length) {
     return { ok: false, error: "Neke knjige nisu dostupne u traženoj količini. Korpa je usklađena sa stanjem.", stock };
   }
 
-  const subtotal = items.reduce((s, i) => s + i.price * i.quantity, 0);
-  const shipping = shippingFor(subtotal);
+  const subtotal = Math.round(items.reduce((s, i) => s + i.price * i.quantity, 0) * 100) / 100;
+  const shipping = shippingFor(subtotal, currency);
   const session = await getSession();
 
   const { data: order, error: oErr } = await db
     .from("orders")
-    .insert({ ...v, note: v.note || null, user_id: session?.user.id ?? null, subtotal, shipping, total: subtotal + shipping })
+    .insert({ ...v, note: v.note || null, user_id: session?.user.id ?? null, subtotal, shipping, total: subtotal + shipping, currency })
     .select("*")
     .single();
   if (oErr || !order) return { ok: false, error: "Narudžba nije poslana, pokušajte ponovo." };

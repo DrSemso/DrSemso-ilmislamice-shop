@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { date, price } from "@/lib/format";
+import { date, money } from "@/lib/format";
 import { ORDER_STATUS_LABEL, type Order, type OrderStatus } from "@/lib/types";
 
 export const STATUS_STYLE: Record<OrderStatus, string> = {
@@ -36,7 +36,7 @@ export function OrderTable({ orders }: { orders: Order[] }) {
               <td className="px-5 py-3">{o.full_name}<span className="block text-[12.5px] text-muted">{o.phone}</span></td>
               <td className="px-5 py-3">{o.city}<span className="block text-[12.5px] text-muted">{o.country}</span></td>
               <td className="px-5 py-3 text-muted">{date(o.created_at)}</td>
-              <td className="px-5 py-3 text-right font-semibold tabular-nums">{price(Number(o.total))}</td>
+              <td className="px-5 py-3 text-right font-semibold tabular-nums">{money(Number(o.total), o.currency)}</td>
               <td className="px-5 py-3"><StatusPill status={o.status} /></td>
             </tr>
           ))}

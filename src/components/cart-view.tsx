@@ -4,13 +4,18 @@ import Link from "next/link";
 import { Minus, Plus, Trash2 } from "lucide-react";
 import { useCart } from "./cart";
 import { BookCover } from "./book-cover";
-import { price, shippingFor } from "@/lib/format";
+import { convert, money, shippingFor } from "@/lib/format";
 import { shop } from "@/shop.config";
+import { ByCur, Dual, Price } from "./price";
 
 export function CartView() {
-  const { lines, subtotal, setQty, remove } = useCart();
-  const shipping = shippingFor(subtotal);
-  const toFree = shop.shipping.freeFrom ? shop.shipping.freeFrom - subtotal : 0;
+  const { lines, subtotalIn, setQty, remove } = useCart();
+  const sub = { RSD: subtotalIn("RSD"), EUR: subtotalIn("EUR") };
+  const ship = { RSD: shippingFor(sub.RSD, "RSD"), EUR: shippingFor(sub.EUR, "EUR") };
+  const toFree = (cur: "RSD" | "EUR") => {
+    const left = shop.shipping[cur].freeFrom ? shop.shipping[cur].freeFrom - sub[cur] : 0;
+    return left > 0 ? `Dodajte još ${money(left, cur)} za besplatnu dostavu.` : null;
+  };
 
   if (!lines.length) {
     return (
@@ -38,20 +43,20 @@ export function CartView() {
                 <div className="hidden min-w-0 sm:block">
                   <Link href={`/proizvod/${l.slug}`} className="font-semibold hover:text-accent">{l.title}</Link>
                   {l.author && <p className="text-[13px] text-muted">{l.author}</p>}
-                  <p className="text-[13px] text-muted tabular-nums">{price(l.price)}</p>
+                  <p className="text-[13px] text-muted tabular-nums"><Price value={l.price} /></p>
                 </div>
               </div>
               <div className="flex flex-col gap-3 sm:contents">
                 <div className="sm:hidden">
                   <Link href={`/proizvod/${l.slug}`} className="font-semibold">{l.title}</Link>
-                  <p className="text-[13px] text-muted tabular-nums">{price(l.price)}</p>
+                  <p className="text-[13px] text-muted tabular-nums"><Price value={l.price} /></p>
                 </div>
                 <div className="flex w-fit items-center rounded-[3px] border border-line bg-white">
                   <button aria-label="Smanji" className="px-2.5 py-2 text-muted hover:text-ink" onClick={() => setQty(l.id, l.quantity - 1)}><Minus size={14} /></button>
                   <span className="w-8 text-center tabular-nums">{l.quantity}</span>
                   <button aria-label="Povećaj" className="px-2.5 py-2 text-muted hover:text-ink disabled:opacity-30" disabled={l.quantity >= l.maxQty} onClick={() => setQty(l.id, l.quantity + 1)}><Plus size={14} /></button>
                 </div>
-                <span className="font-semibold tabular-nums sm:text-right">{price(l.price * l.quantity)}</span>
+                <span className="font-semibold tabular-nums sm:text-right"><Dual rsd={l.price * l.quantity} eur={convert(l.price, "EUR") * l.quantity} /></span>
                 <button aria-label={`Ukloni ${l.title}`} onClick={() => remove(l.id)} className="w-fit text-muted hover:text-danger sm:justify-self-end">
                   <Trash2 size={17} />
                 </button>
@@ -65,13 +70,11 @@ export function CartView() {
       <aside className="h-fit space-y-4 bg-surface p-6 lg:sticky lg:top-36">
         <h2 className="font-serif text-[22px] font-bold">Pregled narudžbe</h2>
         <dl className="space-y-2 text-[15px]">
-          <div className="flex justify-between"><dt>Knjige</dt><dd className="tabular-nums">{price(subtotal)}</dd></div>
-          <div className="flex justify-between"><dt>Dostava</dt><dd className="tabular-nums">{shipping ? price(shipping) : "Besplatna"}</dd></div>
-          <div className="flex justify-between border-t border-line pt-3 text-[18px] font-bold"><dt>Ukupno</dt><dd className="tabular-nums">{price(subtotal + shipping)}</dd></div>
+          <div className="flex justify-between"><dt>Knjige</dt><dd className="tabular-nums"><Dual rsd={sub.RSD} eur={sub.EUR} /></dd></div>
+          <div className="flex justify-between"><dt>Dostava</dt><dd className="tabular-nums"><Dual rsd={ship.RSD} eur={ship.EUR} zero="Besplatna" /></dd></div>
+          <div className="flex justify-between border-t border-line pt-3 text-[18px] font-bold"><dt>Ukupno</dt><dd className="tabular-nums"><Dual rsd={sub.RSD + ship.RSD} eur={sub.EUR + ship.EUR} /></dd></div>
         </dl>
-        {toFree > 0 && (
-          <p className="text-[13px] text-muted">Dodajte još {price(toFree)} za besplatnu dostavu.</p>
-        )}
+        <p className="text-[13px] text-muted empty:hidden"><ByCur rsd={toFree("RSD")} eur={toFree("EUR")} /></p>
         <p className="text-[13px] text-muted">Plaćanje pouzećem: iznos plaćate kuriru kad paket stigne.</p>
         <Link href="/narudzba" className="btn btn-dark w-full py-3.5 text-[15px]">Nastavi na narudžbu</Link>
       </aside>

@@ -1,7 +1,8 @@
 import Link from "next/link";
 import { BookCover } from "./book-cover";
 import { AddToCart } from "./add-to-cart";
-import { discountPercent, price } from "@/lib/format";
+import { discountPercent } from "@/lib/format";
+import { Price } from "./price";
 import type { Product } from "@/lib/types";
 
 export function ProductCard({ product, priority = false }: { product: Product; priority?: boolean }) {
@@ -26,8 +27,8 @@ export function ProductCard({ product, priority = false }: { product: Product; p
         </h3>
         {product.author && <p className="text-[13px] text-muted">{product.author.name}</p>}
         <p className="mt-auto pt-1.5 text-[15px] font-bold tabular-nums">
-          {price(product.price)}
-          {off > 0 && <s className="ml-2 text-[13px] font-normal text-muted">{price(product.compare_at_price!)}</s>}
+          <Price value={product.price} />
+          {off > 0 && <s className="ml-2 text-[13px] font-normal text-muted"><Price value={product.compare_at_price!} /></s>}
         </p>
         <AddToCart product={product} />
       </div>

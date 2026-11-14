@@ -21,19 +21,19 @@ export const DEMO_ORDERS: Order[] = [
   {
     id: "00000000-0000-4000-a000-000000001001", number: 1001, user_id: null, email: "amina@primjer.ba", full_name: "Amina Hodžić",
     phone: "+387 61 000 000", address: "Ferhadija 1", city: "Sarajevo", postal_code: "71000", country: "Bosna i Hercegovina",
-    note: "Molim dostavu poslije 16h.", subtotal: 46, shipping: 7, total: 53, payment_method: "pouzece", status: "nova",
+    note: "Molim dostavu poslije 16h.", subtotal: 38.5, shipping: 10, total: 48.5, currency: "EUR", payment_method: "pouzece", status: "nova",
     tracking_number: null, created_at: new Date(Date.now() - 3600e3).toISOString(),
     order_items: [
-      { id: "i1", order_id: "", product_id: null, title: "Ne tuguj", price: 18, quantity: 1 },
-      { id: "i2", order_id: "", product_id: null, title: "Zapečaćeni džennetski napitak", price: 28, quantity: 1 },
+      { id: "i1", order_id: "", product_id: null, title: "Ne tuguj", price: 15, quantity: 1 },
+      { id: "i2", order_id: "", product_id: null, title: "Zapečaćeni džennetski napitak", price: 23.5, quantity: 1 },
     ],
   },
   {
     id: "00000000-0000-4000-a000-000000001000", number: 1000, user_id: null, email: "emir@primjer.rs", full_name: "Emir Ljajić",
     phone: "+381 64 000 000", address: "28. novembra 10", city: "Novi Pazar", postal_code: "36300", country: "Srbija",
-    note: null, subtotal: 38, shipping: 7, total: 45, payment_method: "pouzece", status: "poslana",
+    note: null, subtotal: 4600, shipping: 450, total: 5050, currency: "RSD", payment_method: "pouzece", status: "poslana",
     tracking_number: "PE123456789", created_at: new Date(Date.now() - 86400e3 * 2).toISOString(),
-    order_items: [{ id: "i3", order_id: "", product_id: null, title: "Set: Temelji vjere", price: 38, quantity: 1 }],
+    order_items: [{ id: "i3", order_id: "", product_id: null, title: "Set: Temelji vjere", price: 4600, quantity: 1 }],
   },
 ];
 

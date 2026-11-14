@@ -1,6 +1,7 @@
 "use client";
 
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
+import { convert, type Currency } from "@/lib/format";
 
 export type CartLine = {
   id: string;
@@ -16,7 +17,10 @@ export type CartLine = {
 type CartCtx = {
   lines: CartLine[];
   count: number;
+  /** Subtotal in dinars (catalog currency). */
   subtotal: number;
+  /** Subtotal in the given currency, converted per item the same way the order is. */
+  subtotalIn: (cur: Currency) => number;
   add: (line: Omit<CartLine, "quantity">, qty?: number) => void;
   setQty: (id: string, qty: number) => void;
   remove: (id: string) => void;
@@ -74,6 +78,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       lines,
       count: lines.reduce((s, l) => s + l.quantity, 0),
       subtotal: lines.reduce((s, l) => s + l.quantity * l.price, 0),
+      subtotalIn: (cur: Currency) => Math.round(lines.reduce((s, l) => s + l.quantity * convert(l.price, cur), 0) * 100) / 100,
       add,
       setQty,
       remove,

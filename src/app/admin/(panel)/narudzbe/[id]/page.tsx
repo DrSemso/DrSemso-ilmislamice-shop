@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { adminOrder } from "@/lib/admin-data";
-import { date, price } from "@/lib/format";
+import { date, money } from "@/lib/format";
 import { StatusPill } from "@/components/admin/order-table";
 import { OrderStatusForm } from "@/components/admin/order-status-form";
 
@@ -27,12 +27,12 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                     <td className="py-2.5">
                       {i.product_id ? <Link href={`/admin/proizvodi/${i.product_id}`} className="hover:text-accent">{i.title}</Link> : i.title}
                     </td>
-                    <td className="py-2.5 text-right text-muted tabular-nums">{i.quantity} × {price(Number(i.price))}</td>
-                    <td className="w-28 py-2.5 text-right font-semibold tabular-nums">{price(Number(i.price) * i.quantity)}</td>
+                    <td className="py-2.5 text-right text-muted tabular-nums">{i.quantity} × {money(Number(i.price), order.currency)}</td>
+                    <td className="w-28 py-2.5 text-right font-semibold tabular-nums">{money(Number(i.price) * i.quantity, order.currency)}</td>
                   </tr>
                 ))}
-                <tr><td className="py-2.5 text-muted" colSpan={2}>Dostava</td><td className="py-2.5 text-right tabular-nums">{price(Number(order.shipping))}</td></tr>
-                <tr className="text-[16px] font-bold"><td className="py-3" colSpan={2}>Naplatiti pouzećem</td><td className="py-3 text-right tabular-nums">{price(Number(order.total))}</td></tr>
+                <tr><td className="py-2.5 text-muted" colSpan={2}>Dostava</td><td className="py-2.5 text-right tabular-nums">{money(Number(order.shipping), order.currency)}</td></tr>
+                <tr className="text-[16px] font-bold"><td className="py-3" colSpan={2}>Naplatiti pouzećem</td><td className="py-3 text-right tabular-nums">{money(Number(order.total), order.currency)}</td></tr>
               </tbody>
             </table>
           </section>

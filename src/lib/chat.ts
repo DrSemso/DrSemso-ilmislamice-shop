@@ -1,7 +1,7 @@
 import "server-only";
 import { shop } from "@/shop.config";
 import { fold, getProducts } from "./data";
-import { price } from "./format";
+import { money, price } from "./format";
 
 /** Answer from the FAQ when no AI key is configured: pick the entry sharing the most words with the question. */
 const STOP = new Set(["imate", "imali", "knjigu", "knjiga", "knjige", "trazim", "preporucite", "preporuka", "molim", "koja", "koju", "neku", "nesto", "mogu", "kako", "koliko", "zelim"]);
@@ -36,7 +36,7 @@ Ne izmišljaj cijene, rokove ni pravila. Na vjerska pitanja koja traže fetvu ne
 
 Činjenice o trgovini:
 - Plaćanje: isključivo pouzećem (kupac plaća kuriru pri preuzimanju).
-- Dostava: ${price(shop.shipping.price)}${shop.shipping.freeFrom ? `, besplatna iznad ${price(shop.shipping.freeFrom)}` : ""}; rok ${shop.shipping.deliveryTime}.
+- Cijene: u Srbiji u dinarima, za ostale zemlje u eurima (din / ${shop.currency.eurRate}). Dostava: Srbija ${money(shop.shipping.RSD.price, "RSD")} (besplatna iznad ${money(shop.shipping.RSD.freeFrom, "RSD")}), ostale zemlje ${money(shop.shipping.EUR.price, "EUR")} (besplatna iznad ${money(shop.shipping.EUR.freeFrom, "EUR")}); rok ${shop.shipping.deliveryTime}.
 - Naručivanje je moguće i bez korisničkog računa.
 
 Česta pitanja:

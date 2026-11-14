@@ -5,7 +5,7 @@ import { isDemo } from "@/lib/env";
 import { createSupabaseServer } from "@/lib/supabase/server";
 import { LoginForm } from "@/components/login-form";
 import { ProfileForm } from "@/components/profile-form";
-import { date, price } from "@/lib/format";
+import { date, money } from "@/lib/format";
 import { ORDER_STATUS_LABEL, type Order } from "@/lib/types";
 
 export const metadata: Metadata = { title: "Moj račun", robots: { index: false } };
@@ -72,11 +72,11 @@ export default async function AccountPage() {
                   </div>
                   <ul className="mt-3 space-y-1 text-[14px] text-ink/80">
                     {o.order_items?.map((i) => (
-                      <li key={i.id} className="flex justify-between gap-4"><span>{i.title} × {i.quantity}</span><span className="tabular-nums">{price(Number(i.price) * i.quantity)}</span></li>
+                      <li key={i.id} className="flex justify-between gap-4"><span>{i.title} × {i.quantity}</span><span className="tabular-nums">{money(Number(i.price) * i.quantity, o.currency)}</span></li>
                     ))}
                   </ul>
                   <p className="mt-3 flex justify-between border-t border-line pt-3 text-[14.5px] font-semibold">
-                    <span>Ukupno (pouzećem)</span><span className="tabular-nums">{price(Number(o.total))}</span>
+                    <span>Ukupno (pouzećem)</span><span className="tabular-nums">{money(Number(o.total), o.currency)}</span>
                   </p>
                   {o.tracking_number && <p className="mt-2 text-[13.5px] text-muted">Broj pošiljke: {o.tracking_number}</p>}
                 </li>

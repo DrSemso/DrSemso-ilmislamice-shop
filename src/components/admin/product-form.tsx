@@ -4,6 +4,7 @@ import { useActionState, useMemo, useState } from "react";
 import { ImagePlus, X } from "lucide-react";
 import { saveProduct } from "@/app/admin/actions";
 import type { Author, Category, Product, Publisher } from "@/lib/types";
+import { convert, money, parseAmount } from "@/lib/format";
 
 type Props = {
   product?: Product & { set_item_ids: string[] };
@@ -17,6 +18,8 @@ type Props = {
 export function ProductForm({ product: p, categories, publishers, authors, books }: Props) {
   const [state, action, pending] = useActionState(saveProduct, null);
   const [isSet, setIsSet] = useState(p?.is_set ?? false);
+  const [priceText, setPriceText] = useState(p?.price != null ? String(p.price) : "");
+  const priceNum = parseAmount(priceText) ?? 0;
   const [coverPreview, setCoverPreview] = useState<string | null>(p?.cover_url ?? null);
   const [keep, setKeep] = useState<string[]>(p?.images ?? []);
   const [newAuthor, setNewAuthor] = useState(false);
@@ -194,8 +197,11 @@ export function ProductForm({ product: p, categories, publishers, authors, books
         <section className={section}>
           <h2 className={h2}>Cijena i zalihe</h2>
           <div>
-            <label htmlFor="pf-price" className="label">Cijena (KM) *</label>
-            <input id="pf-price" name="price" required inputMode="decimal" defaultValue={p?.price ?? ""} className="input" placeholder="18,00" />
+            <label htmlFor="pf-price" className="label">Cijena (din) *</label>
+            <input id="pf-price" name="price" required inputMode="decimal" value={priceText} onChange={(e) => setPriceText(e.target.value)} className="input" placeholder="1800" />
+            <p className="mt-1 text-[13px] text-muted">
+              {priceNum > 0 ? `Kupci van Srbije vide ${money(convert(priceNum, "EUR"), "EUR")}` : "Kupci van Srbije vide cijenu u eurima (din / 120)."}
+            </p>
           </div>
           <div>
             <label htmlFor="pf-cmp" className="label">Stara cijena, za popust (nije obavezno)</label>

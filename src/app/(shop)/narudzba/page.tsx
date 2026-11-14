@@ -1,5 +1,8 @@
 import type { Metadata } from "next";
+import { cookies, headers } from "next/headers";
+import { CURRENCY_COOKIE } from "@/lib/currency-cookie";
 import { getSession } from "@/lib/auth";
+import { shop } from "@/shop.config";
 import { CheckoutForm } from "@/components/checkout-form";
 
 export const metadata: Metadata = { title: "Narudžba", robots: { index: false } };
@@ -8,6 +11,10 @@ export const dynamic = "force-dynamic";
 export default async function Page() {
   const session = await getSession();
   const p = session?.profile;
+  // No saved address: guess the country from the visitor's location, or from the currency they picked.
+  const geo = (await headers()).get("x-vercel-ip-country") ?? ((await cookies()).get(CURRENCY_COOKIE)?.value === "EUR" ? "BA" : "RS");
+  const geoCountry = { RS: "Srbija", BA: "Bosna i Hercegovina", ME: "Crna Gora", HR: "Hrvatska" }[geo] ?? "Drugo";
+  const known = (c?: string | null) => (c && (shop.shipping.countries as readonly string[]).includes(c) ? c : null);
   return (
     <div className="container-x pt-10">
       <h1 className="font-serif text-[clamp(32px,4.5vw,44px)] font-bold">Narudžba</h1>
@@ -23,7 +30,7 @@ export default async function Page() {
           address: p?.address ?? "",
           city: p?.city ?? "",
           postal_code: p?.postal_code ?? "",
-          country: p?.country ?? "Bosna i Hercegovina",
+          country: known(p?.country) ?? known(geoCountry) ?? shop.shipping.countries[0],
         }}
       />
     </div>

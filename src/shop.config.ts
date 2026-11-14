@@ -9,7 +9,12 @@ export const shop = {
   description:
     "Islamske knjige na bosanskom jeziku: tefsir, hadis, akaid, sira, knjige za djecu i setovi knjiga. Plaćanje pouzećem, dostava širom svijeta.",
   locale: "bs-BA",
-  currency: "KM",
+  // Prices are entered in dinars (RSD). Visitors from Serbia see dinars, everyone else euros (din / eurRate).
+  currency: {
+    base: "RSD" as const,
+    eurRate: 120, // 1800 din = 15 €
+    homeCountry: "Srbija", // orders shipped here are charged in dinars, all other countries in euros
+  },
   contact: {
     email: "info@ilmislamice.com",
     phone: "+387 00 000 000",
@@ -18,9 +23,10 @@ export const shop = {
     address: "",
   },
   shipping: {
-    price: 7, // flat courier price
-    freeFrom: 100, // free shipping above this subtotal; 0 disables
-    countries: ["Bosna i Hercegovina", "Srbija", "Crna Gora", "Hrvatska", "Drugo"],
+    // Courier price per currency, in that currency's own units. freeFrom: free shipping above this subtotal; 0 disables.
+    RSD: { price: 450, freeFrom: 6000 },
+    EUR: { price: 10, freeFrom: 80 },
+    countries: ["Srbija", "Bosna i Hercegovina", "Crna Gora", "Hrvatska", "Drugo"],
     deliveryTime: "2 do 5 radnih dana",
   },
   announcements: [
@@ -61,7 +67,7 @@ export const shop = {
     },
     {
       q: "Koliko košta dostava?",
-      a: "Dostava kurirskom službom košta 7 KM, a za narudžbe iznad 100 KM je besplatna.",
+      a: "U Srbiji dostava košta 450 din, a iznad 6.000 din je besplatna. Za ostale zemlje dostava je 10 €, a iznad 80 € besplatna.",
     },
     {
       q: "Da li dostavljate u moju zemlju?",

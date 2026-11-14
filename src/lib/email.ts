@@ -1,6 +1,6 @@
 import "server-only";
 import { shop } from "@/shop.config";
-import { price, date } from "./format";
+import { money, date } from "./format";
 import { SITE_URL } from "./env";
 import type { Order, OrderItem } from "./types";
 
@@ -47,12 +47,12 @@ function itemsTable(order: Order, items: Pick<OrderItem, "title" | "price" | "qu
   const rows = items
     .map(
       (i) => `<tr><td style="padding:8px 0;border-bottom:1px solid #eee">${esc(i.title)} × ${i.quantity}</td>
-<td style="padding:8px 0;border-bottom:1px solid #eee;text-align:right;white-space:nowrap">${price(i.price * i.quantity)}</td></tr>`,
+<td style="padding:8px 0;border-bottom:1px solid #eee;text-align:right;white-space:nowrap">${money(i.price * i.quantity, order.currency)}</td></tr>`,
     )
     .join("");
   return `<table width="100%" cellpadding="0" cellspacing="0" style="font-size:14px">${rows}
-<tr><td style="padding:8px 0;color:#6b6b6b">Dostava</td><td style="padding:8px 0;text-align:right;color:#6b6b6b">${order.shipping ? price(order.shipping) : "Besplatna"}</td></tr>
-<tr><td style="padding:8px 0;font-weight:bold">Ukupno za plaćanje pouzećem</td><td style="padding:8px 0;text-align:right;font-weight:bold">${price(order.total)}</td></tr></table>`;
+<tr><td style="padding:8px 0;color:#6b6b6b">Dostava</td><td style="padding:8px 0;text-align:right;color:#6b6b6b">${order.shipping ? money(order.shipping, order.currency) : "Besplatna"}</td></tr>
+<tr><td style="padding:8px 0;font-weight:bold">Ukupno za plaćanje pouzećem</td><td style="padding:8px 0;text-align:right;font-weight:bold">${money(order.total, order.currency)}</td></tr></table>`;
 }
 
 function address(order: Order) {
@@ -74,7 +74,7 @@ ${itemsTable(order, items)}${address(order)}
   await Promise.all([
     sendMail({ to: order.email, subject: `Potvrda narudžbe #${order.number}`, html: customer }),
     process.env.OWNER_EMAIL
-      ? sendMail({ to: process.env.OWNER_EMAIL, subject: `Nova narudžba #${order.number}, ${price(order.total)}`, html: owner, replyTo: order.email })
+      ? sendMail({ to: process.env.OWNER_EMAIL, subject: `Nova narudžba #${order.number}, ${money(order.total, order.currency)}`, html: owner, replyTo: order.email })
       : Promise.resolve(),
   ]);
 }
@@ -82,7 +82,7 @@ ${itemsTable(order, items)}${address(order)}
 export async function sendStatusEmail(order: Order) {
   const text: Partial<Record<Order["status"], string>> = {
     potvrdjena: "Vaša narudžba je potvrđena i pripremamo je za slanje.",
-    poslana: `Vaša narudžba je predata kurirskoj službi.${order.tracking_number ? ` Broj pošiljke: <b>${esc(order.tracking_number)}</b>.` : ""} Iznos od ${price(order.total)} plaćate kuriru.`,
+    poslana: `Vaša narudžba je predata kurirskoj službi.${order.tracking_number ? ` Broj pošiljke: <b>${esc(order.tracking_number)}</b>.` : ""} Iznos od ${money(order.total, order.currency)} plaćate kuriru.`,
     otkazana: `Vaša narudžba je otkazana. Ako je ovo greška, javite nam se na ${esc(shop.contact.email)}.`,
   };
   const body = text[order.status];

@@ -5,7 +5,7 @@ import { redirect } from "next/navigation";
 import { requireAdmin } from "@/lib/admin-data";
 import { createSupabaseAdmin } from "@/lib/supabase/server";
 import { sendStatusEmail } from "@/lib/email";
-import { slugify } from "@/lib/format";
+import { parseAmount, slugify } from "@/lib/format";
 import type { Order, OrderStatus } from "@/lib/types";
 
 export type FormState = { ok: boolean; message: string } | null;
@@ -14,7 +14,7 @@ const DEMO_MSG = "Demo režim: izmjene se čuvaju tek kad se poveže baza (Supab
 const str = (f: FormData, k: string) => String(f.get(k) ?? "").trim();
 const opt = (f: FormData, k: string) => str(f, k) || null;
 const int = (f: FormData, k: string) => (str(f, k) ? Math.round(Number(str(f, k))) : null);
-const money = (f: FormData, k: string) => (str(f, k) ? Number(str(f, k).replace(",", ".")) : null);
+const money = (f: FormData, k: string) => parseAmount(str(f, k));
 
 function refreshShop() {
   revalidatePath("/", "layout");
@@ -49,7 +49,7 @@ export async function saveProduct(_: FormState, f: FormData): Promise<FormState>
   const title = str(f, "title");
   const price = money(f, "price");
   if (!title) return { ok: false, message: "Upišite naziv." };
-  if (price == null || Number.isNaN(price) || price < 0) return { ok: false, message: "Upišite ispravnu cijenu (npr. 18 ili 18,50)." };
+  if (price == null || Number.isNaN(price) || price < 0) return { ok: false, message: "Upišite ispravnu cijenu (npr. 1800)." };
 
   try {
     let cover_url = opt(f, "existing_cover");

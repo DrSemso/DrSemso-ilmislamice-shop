@@ -4,7 +4,8 @@ import Image from "next/image";
 import { notFound } from "next/navigation";
 import { Check, MessageCircle, Truck, X } from "lucide-react";
 import { getProductBySlug, getProducts, getSetItems, getSetsContaining } from "@/lib/data";
-import { discountPercent, price } from "@/lib/format";
+import { discountPercent } from "@/lib/format";
+import { Dual, Price } from "@/components/price";
 import { BookCover } from "@/components/book-cover";
 import { AddToCart } from "@/components/add-to-cart";
 import { ProductGrid } from "@/components/product-card";
@@ -57,7 +58,7 @@ export default async function ProductPage({ params }: { params: Params }) {
     offers: {
       "@type": "Offer",
       price: product.price,
-      priceCurrency: shop.currency === "KM" ? "BAM" : shop.currency,
+      priceCurrency: "RSD",
       availability: inStock ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",
     },
   };
@@ -115,11 +116,11 @@ export default async function ProductPage({ params }: { params: Params }) {
           )}
 
           <div className="mt-7 flex items-baseline gap-3 border-y border-line py-5">
-            <span className="text-[30px] font-bold tabular-nums">{price(product.price)}</span>
+            <span className="text-[30px] font-bold tabular-nums"><Price value={product.price} /></span>
             {off > 0 && (
               <>
-                <s className="text-[17px] text-muted">{price(product.compare_at_price!)}</s>
-                <span className="text-[14px] font-semibold text-accent">Ušteda {price(product.compare_at_price! - product.price)}</span>
+                <s className="text-[17px] text-muted"><Price value={product.compare_at_price!} /></s>
+                <span className="text-[14px] font-semibold text-accent">Ušteda <Price value={product.compare_at_price! - product.price} /></span>
               </>
             )}
           </div>
@@ -138,7 +139,7 @@ export default async function ProductPage({ params }: { params: Params }) {
               <Truck size={18} className="shrink-0 text-accent" />
               <span>
                 Dostava {shop.shipping.deliveryTime}, plaćanje pouzećem.
-                {shop.shipping.freeFrom ? ` Besplatna dostava iznad ${price(shop.shipping.freeFrom)}.` : ""}
+                {" "}Besplatna dostava iznad <Dual rsd={shop.shipping.RSD.freeFrom} eur={shop.shipping.EUR.freeFrom} />.
               </span>
             </li>
             <li className="flex gap-3">
@@ -170,12 +171,12 @@ export default async function ProductPage({ params }: { params: Params }) {
                       <Link href={`/proizvod/${b.slug}`} className="font-semibold hover:text-accent">{b.title}</Link>
                       {b.author && <p className="text-[13px] text-muted">{b.author.name}</p>}
                     </div>
-                    <span className="text-[14px] text-muted tabular-nums">{price(b.price)}</span>
+                    <span className="text-[14px] text-muted tabular-nums"><Price value={b.price} /></span>
                   </li>
                 ))}
               </ul>
               <p className="mt-3 text-[14px] text-muted">
-                Pojedinačno: {price(setItems.reduce((s, b) => s + b.price, 0))}. U setu: <b className="text-ink">{price(product.price)}</b>.
+                Pojedinačno: <Price value={setItems.reduce((s, b) => s + b.price, 0)} />. U setu: <b className="text-ink"><Price value={product.price} /></b>.
               </p>
             </section>
           )}

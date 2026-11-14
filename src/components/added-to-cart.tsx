@@ -5,10 +5,10 @@ import { useEffect } from "react";
 import { Check, X } from "lucide-react";
 import { useCart } from "./cart";
 import { BookCover } from "./book-cover";
-import { price } from "@/lib/format";
+import { Dual, Price } from "./price";
 
 export function AddedToCart() {
-  const { lastAdded, dismissAdded, count, subtotal } = useCart();
+  const { lastAdded, dismissAdded, count, subtotalIn } = useCart();
 
   useEffect(() => {
     if (!lastAdded) return;
@@ -29,8 +29,8 @@ export function AddedToCart() {
         <div className="w-16 shrink-0"><BookCover product={{ title: lastAdded.title, cover_url: lastAdded.cover_url, is_set: false, author: lastAdded.author ? { name: lastAdded.author } : null }} sizes="64px" /></div>
         <div className="min-w-0">
           <p className="font-semibold leading-snug">{lastAdded.title}</p>
-          <p className="text-[13px] text-muted">{lastAdded.quantity} × {price(lastAdded.price)}</p>
-          <p className="mt-2 text-[13px]">U korpi: {count} kom. · {price(subtotal)}</p>
+          <p className="text-[13px] text-muted">{lastAdded.quantity} × <Price value={lastAdded.price} /></p>
+          <p className="mt-2 text-[13px]">U korpi: {count} kom. · <Dual rsd={subtotalIn("RSD")} eur={subtotalIn("EUR")} /></p>
         </div>
       </div>
       <div className="mt-5 grid grid-cols-2 gap-2">

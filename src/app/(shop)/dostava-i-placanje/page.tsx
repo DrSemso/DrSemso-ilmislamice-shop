@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { shop } from "@/shop.config";
-import { price } from "@/lib/format";
+import { money } from "@/lib/format";
 
 export const metadata: Metadata = { title: "Dostava i plaćanje" };
 
@@ -16,7 +16,7 @@ export default function Page() {
         </section>
         <section>
           <h2 className="mb-2 font-serif text-[22px] font-bold text-ink">Cijena i rok dostave</h2>
-          <p>Dostava kurirskom službom košta {price(shop.shipping.price)}{shop.shipping.freeFrom ? `, a za narudžbe iznad ${price(shop.shipping.freeFrom)} je besplatna` : ""}. Paket obično stiže za {shop.shipping.deliveryTime} od potvrde narudžbe.</p>
+          <p>Za Srbiju cijene su u dinarima, a dostava košta {money(shop.shipping.RSD.price, "RSD")}{shop.shipping.RSD.freeFrom ? `, odnosno besplatna je za narudžbe iznad ${money(shop.shipping.RSD.freeFrom, "RSD")}` : ""}. Za sve ostale zemlje cijene su u eurima, a dostava košta {money(shop.shipping.EUR.price, "EUR")}{shop.shipping.EUR.freeFrom ? `, odnosno besplatna je iznad ${money(shop.shipping.EUR.freeFrom, "EUR")}` : ""}. Paket obično stiže za {shop.shipping.deliveryTime} od potvrde narudžbe.</p>
           <p>Dostavljamo u: {shop.shipping.countries.filter((c) => c !== "Drugo").join(", ")}. Za druge zemlje nam se javite pa ćemo dogovoriti dostavu.</p>
         </section>
         <section>

@@ -70,6 +70,8 @@ export type Order = {
   subtotal: number;
   shipping: number;
   total: number;
+  /** Currency the order is charged in (amounts on the order and its items are in it). */
+  currency: "RSD" | "EUR";
   payment_method: string;
   status: OrderStatus;
   tracking_number: string | null;

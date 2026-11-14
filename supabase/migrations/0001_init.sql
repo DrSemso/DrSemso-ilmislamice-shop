@@ -98,7 +98,7 @@ create table public.profiles (
   address text,
   city text,
   postal_code text,
-  country text default 'Bosna i Hercegovina',
+  country text,
   is_admin boolean not null default false,
   created_at timestamptz not null default now()
 );
@@ -140,6 +140,7 @@ create table public.orders (
   subtotal numeric(10,2) not null,
   shipping numeric(10,2) not null,
   total numeric(10,2) not null,
+  currency text not null default 'RSD' check (currency in ('RSD', 'EUR')),
   payment_method text not null default 'pouzece',
   status public.order_status not null default 'nova',
   tracking_number text,
