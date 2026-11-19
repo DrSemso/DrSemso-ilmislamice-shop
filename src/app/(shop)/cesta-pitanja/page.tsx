@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { shop } from "@/shop.config";
 import { Faq } from "@/components/faq";
 
-export const metadata: Metadata = { title: "Česta pitanja" };
+export const metadata: Metadata = { title: "Česta pitanja", alternates: { canonical: "/cesta-pitanja" } };
 
 export default function Page() {
   return (

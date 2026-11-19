@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { getProducts, getPublishers } from "@/lib/data";
 
-export const metadata: Metadata = { title: "Izdavači" };
+export const metadata: Metadata = { title: "Izdavači", alternates: { canonical: "/izdavaci" } };
 export const revalidate = 300;
 
 export default async function Page() {

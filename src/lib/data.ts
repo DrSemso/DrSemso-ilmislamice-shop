@@ -169,3 +169,16 @@ function sorter(sort: ProductSort) {
     }
   };
 }
+
+/** Every public product slug with its last change, for the sitemap. */
+export async function getProductSlugs(): Promise<{ slug: string; updated_at: string | null }[]> {
+  if (isDemo) return (demo.products as unknown as Product[]).map((p) => ({ slug: p.slug, updated_at: null }));
+  const { data, error } = await createSupabasePublic()
+    .from("products")
+    .select("slug, updated_at")
+    .eq("active", true)
+    .order("slug")
+    .range(0, 9999);
+  if (error) throw error;
+  return data ?? [];
+}

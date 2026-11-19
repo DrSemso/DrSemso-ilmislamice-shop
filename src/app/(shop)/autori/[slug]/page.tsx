@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { listingMeta } from "@/lib/seo";
 import { notFound } from "next/navigation";
 import { Catalog } from "@/components/catalog";
 import { getAuthors } from "@/lib/data";
@@ -6,10 +7,10 @@ import { getAuthors } from "@/lib/data";
 type Params = Promise<{ slug: string }>;
 type SP = Promise<Record<string, string | string[] | undefined>>;
 
-export async function generateMetadata({ params }: { params: Params }): Promise<Metadata> {
+export async function generateMetadata({ params, searchParams }: { params: Params; searchParams: SP }): Promise<Metadata> {
   const { slug } = await params;
   const a = (await getAuthors()).find((x) => x.slug === slug);
-  return { title: a?.name ?? "Autor", description: a?.bio ?? undefined };
+  return listingMeta(`/autori/${slug}`, a ? `${a.name}, knjige` : "Autor", await searchParams, a?.bio ?? (a ? `Knjige autora ${a.name} na bosanskom jeziku. Plaćanje pouzećem.` : null));
 }
 
 export default async function Page({ params, searchParams }: { params: Params; searchParams: SP }) {

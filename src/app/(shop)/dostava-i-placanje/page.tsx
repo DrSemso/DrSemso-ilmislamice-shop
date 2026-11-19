@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { shop } from "@/shop.config";
 import { money } from "@/lib/format";
 
-export const metadata: Metadata = { title: "Dostava i plaćanje" };
+export const metadata: Metadata = { title: "Dostava i plaćanje", alternates: { canonical: "/dostava-i-placanje" } };
 
 export default function Page() {
   return (

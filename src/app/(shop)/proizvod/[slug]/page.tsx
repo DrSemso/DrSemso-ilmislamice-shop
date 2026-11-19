@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
+import { SITE_URL } from "@/lib/env";
+import { breadcrumbJsonLd } from "@/lib/seo";
 import { notFound } from "next/navigation";
 import { Check, MessageCircle, Truck, X } from "lucide-react";
 import { getProductBySlug, getProducts, getSetItems, getSetsContaining } from "@/lib/data";
@@ -19,8 +21,9 @@ export async function generateMetadata({ params }: { params: Params }): Promise<
   if (!p) return { title: "Knjiga nije pronađena" };
   return {
     title: p.author ? `${p.title}, ${p.author.name}` : p.title,
-    description: p.description?.slice(0, 160),
-    openGraph: { images: p.cover_url ? [p.cover_url] : [] },
+    description: productDescription(p),
+    alternates: { canonical: `/proizvod/${p.slug}` },
+    openGraph: { type: "book", images: p.cover_url ? [p.cover_url] : [], url: `/proizvod/${p.slug}` },
   };
 }
 
@@ -48,20 +51,43 @@ export default async function ProductPage({ params }: { params: Params }) {
   ].filter(([, v]) => v != null && v !== "") as [string, React.ReactNode][];
 
   const waText = encodeURIComponent(`Selam, želim naručiti knjigu: ${product.title}`);
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@type": "Product",
-    name: product.title,
-    description: product.description,
-    image: product.cover_url ?? undefined,
-    sku: product.sku ?? undefined,
-    offers: {
-      "@type": "Offer",
-      price: product.price,
-      priceCurrency: "RSD",
-      availability: inStock ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",
+  const url = `${SITE_URL}/proizvod/${product.slug}`;
+  const jsonLd = [
+    {
+      "@context": "https://schema.org",
+      "@type": ["Product", "Book"],
+      "@id": url,
+      url,
+      name: product.title,
+      description: productDescription(product),
+      image: product.cover_url ?? undefined,
+      sku: product.sku ?? undefined,
+      isbn: product.isbn ?? undefined,
+      gtin13: product.isbn?.replace(/[^0-9]/g, "").length === 13 ? product.isbn.replace(/[^0-9]/g, "") : undefined,
+      numberOfPages: product.pages ?? undefined,
+      bookFormat: product.binding ? (/tvrd/i.test(product.binding) ? "https://schema.org/Hardcover" : "https://schema.org/Paperback") : undefined,
+      inLanguage: "bs",
+      datePublished: product.year ? String(product.year) : undefined,
+      author: product.author ? { "@type": "Person", name: product.author.name, url: `${SITE_URL}/autori/${product.author.slug}` } : undefined,
+      translator: product.translator ? { "@type": "Person", name: product.translator } : undefined,
+      publisher: product.publisher ? { "@type": "Organization", name: product.publisher.name } : undefined,
+      brand: product.publisher ? { "@type": "Brand", name: product.publisher.name } : undefined,
+      offers: {
+        "@type": "Offer",
+        url,
+        price: product.price,
+        priceCurrency: "RSD",
+        itemCondition: "https://schema.org/NewCondition",
+        availability: inStock ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",
+        seller: { "@id": `${SITE_URL}/#store` },
+      },
     },
-  };
+    breadcrumbJsonLd([
+      { name: "Početna", path: "/" },
+      ...(product.category ? [{ name: product.category.name, path: `/kategorija/${product.category.slug}` }] : [{ name: "Knjige", path: "/knjige" }]),
+      { name: product.title },
+    ]),
+  ];
 
   return (
     <div className="container-x pt-8">
@@ -220,4 +246,12 @@ export default async function ProductPage({ params }: { params: Params }) {
       )}
     </div>
   );
+}
+
+/** Meta description: the book's own text cut at a word, or a generated line when there is none. */
+function productDescription(p: { title: string; description: string | null; author?: { name: string } | null; publisher?: { name: string } | null }) {
+  const text = (p.description ?? "").replace(/\s+/g, " ").trim();
+  if (text.length > 40) return text.length > 158 ? `${text.slice(0, 155).replace(/\s+\S*$/, "")}…` : text;
+  const by = p.author ? `, ${p.author.name}` : "";
+  return `${p.title}${by}. Islamska knjiga na bosanskom jeziku${p.publisher ? ` (${p.publisher.name})` : ""}. Plaćanje pouzećem, dostava širom Srbije i regiona.`;
 }

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { listingMeta } from "@/lib/seo";
 import { notFound } from "next/navigation";
 import { Catalog } from "@/components/catalog";
 import { getCategories, getCategoryBySlug, getCategoryWithDescendants } from "@/lib/data";
@@ -6,9 +7,10 @@ import { getCategories, getCategoryBySlug, getCategoryWithDescendants } from "@/
 type Params = Promise<{ slug: string }>;
 type SP = Promise<Record<string, string | string[] | undefined>>;
 
-export async function generateMetadata({ params }: { params: Params }): Promise<Metadata> {
-  const c = await getCategoryBySlug((await params).slug);
-  return { title: c?.name ?? "Kategorija", description: c?.description ?? undefined };
+export async function generateMetadata({ params, searchParams }: { params: Params; searchParams: SP }): Promise<Metadata> {
+  const { slug } = await params;
+  const c = await getCategoryBySlug(slug);
+  return listingMeta(`/kategorija/${slug}`, c ? `${c.name}, islamske knjige` : "Kategorija", await searchParams, c?.description);
 }
 
 export default async function Page({ params, searchParams }: { params: Params; searchParams: SP }) {

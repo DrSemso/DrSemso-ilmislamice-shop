@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { listingMeta } from "@/lib/seo";
 import { notFound } from "next/navigation";
 import { Catalog } from "@/components/catalog";
 import { getPublishers } from "@/lib/data";
@@ -6,10 +7,10 @@ import { getPublishers } from "@/lib/data";
 type Params = Promise<{ slug: string }>;
 type SP = Promise<Record<string, string | string[] | undefined>>;
 
-export async function generateMetadata({ params }: { params: Params }): Promise<Metadata> {
+export async function generateMetadata({ params, searchParams }: { params: Params; searchParams: SP }): Promise<Metadata> {
   const { slug } = await params;
   const p = (await getPublishers()).find((x) => x.slug === slug);
-  return { title: p ? `Izdavač ${p.name}` : "Izdavač" };
+  return listingMeta(`/izdavaci/${slug}`, p ? `Izdavač ${p.name}` : "Izdavač", await searchParams, p ? `Knjige izdavača ${p.name}. Plaćanje pouzećem, dostava širom Srbije i regiona.` : null);
 }
 
 export default async function Page({ params, searchParams }: { params: Params; searchParams: SP }) {

@@ -1,4 +1,6 @@
+import type { Metadata } from "next";
 import Link from "next/link";
+import { siteJsonLd } from "@/lib/seo";
 import { ArrowRight, BookOpen, Package, ShieldCheck, Truck } from "lucide-react";
 import { shop } from "@/shop.config";
 import { getCategories, getProducts } from "@/lib/data";
@@ -9,6 +11,8 @@ import { Faq } from "@/components/faq";
 import { CategoryTile } from "@/components/category-tile";
 
 export const revalidate = 300;
+
+export const metadata: Metadata = { alternates: { canonical: "/" } };
 
 export default async function Home() {
   const [categories, newest, featured, sets, sale] = await Promise.all([
@@ -25,6 +29,7 @@ export default async function Home() {
 
   return (
     <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(siteJsonLd()) }} />
       {/* Hero */}
       <section className="relative overflow-hidden bg-surface">
         <div className="container-x relative grid items-center gap-12 py-12 md:grid-cols-[1.1fr_1fr] md:py-24">
