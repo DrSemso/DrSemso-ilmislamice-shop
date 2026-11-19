@@ -35,7 +35,7 @@ export default async function Page({ searchParams }: { searchParams: SP }) {
           </thead>
           <tbody className="divide-y divide-line">
             {products.map((p) => (
-              <tr key={p.id} className={`hover:bg-white ${p.active ? "" : "opacity-55"}`}>
+              <tr key={p.id} className={`hover:bg-card ${p.active ? "" : "opacity-55"}`}>
                 <td className="px-5 py-2.5">
                   <Link href={`/admin/proizvodi/${p.id}`} className="flex items-center gap-3">
                     <span className="w-9 shrink-0"><BookCover product={p} sizes="36px" /></span>

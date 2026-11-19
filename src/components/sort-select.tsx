@@ -27,7 +27,7 @@ export function SortSelect({ value }: { value: string }) {
           const s = q.toString();
           router.push(s ? `${pathname}?${s}` : pathname);
         }}
-        className="rounded-[3px] border border-line bg-white px-2.5 py-1.5 font-medium"
+        className="rounded-[3px] border border-line bg-card px-2.5 py-1.5 font-medium"
       >
         {OPTIONS.map(([v, l]) => (
           <option key={v} value={v}>{l}</option>

@@ -39,7 +39,7 @@ export function AddToCart({ product, variant = "card" }: Props) {
 
   return (
     <div className="flex flex-wrap items-stretch gap-3">
-      <div className="flex items-center rounded-[3px] border border-line bg-white">
+      <div className="flex items-center rounded-[3px] border border-line bg-card">
         <button type="button" aria-label="Smanji količinu" className="px-3 py-3 text-muted hover:text-ink" onClick={() => setQty((q) => Math.max(1, q - 1))}>
           <Minus size={15} />
         </button>

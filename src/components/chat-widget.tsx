@@ -59,7 +59,7 @@ export function ChatWidget() {
     return (
       <button
         onClick={() => setOpen(true)}
-        className="fixed bottom-5 right-5 z-40 flex items-center gap-2 rounded-full bg-dark p-4 sm:py-3 sm:pl-4 sm:pr-5 text-[14px] font-medium text-on-dark shadow-lg transition hover:bg-accent"
+        className="fixed bottom-5 right-5 z-40 flex items-center gap-2 rounded-full bg-btn p-4 sm:py-3 sm:pl-4 sm:pr-5 text-[14px] font-medium text-on-btn shadow-lg transition hover:bg-accent hover:text-accent-ink"
         style={{ marginBottom: "env(safe-area-inset-bottom, 0px)" }}
       >
         <MessageCircle size={18} /> <span className="hidden sm:inline">Trebate li pomoć?</span><span className="sr-only sm:hidden">Chat</span>
@@ -70,7 +70,7 @@ export function ChatWidget() {
   return (
     <section
       aria-label="Chat"
-      className={`fixed bottom-0 right-0 z-50 flex flex-col overflow-hidden bg-white shadow-2xl sm:bottom-5 sm:right-5 sm:rounded-3xl ${
+      className={`fixed bottom-0 right-0 z-50 flex flex-col overflow-hidden bg-card shadow-2xl sm:bottom-5 sm:right-5 sm:rounded-3xl ${
         big ? "h-[100dvh] w-full sm:h-[min(760px,calc(100dvh-40px))] sm:w-[640px]" : "h-[100dvh] w-full sm:h-[560px] sm:w-[420px]"
       }`}
     >

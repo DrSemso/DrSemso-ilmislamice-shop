@@ -31,7 +31,7 @@ export default async function AccountPage() {
             <Link href="/knjige" className="mt-3 inline-block link">Razgledajte knjige →</Link>
           </div>
         </div>
-        <div className="h-fit border border-line bg-white p-7 sm:p-9">
+        <div className="h-fit border border-line bg-card p-7 sm:p-9">
           <h2 className="mb-6 font-serif text-[24px] font-bold">Prijava</h2>
           <LoginForm demo={isDemo} />
         </div>
@@ -65,7 +65,7 @@ export default async function AccountPage() {
           ) : (
             <ul className="mt-5 space-y-4">
               {orders.map((o) => (
-                <li key={o.id} className="border border-line bg-white p-5">
+                <li key={o.id} className="border border-line bg-card p-5">
                   <div className="flex flex-wrap items-center justify-between gap-2">
                     <p className="font-semibold">Narudžba #{o.number} <span className="font-normal text-muted">· {date(o.created_at)}</span></p>
                     <span className="rounded-full bg-surface px-3 py-1 text-[12.5px] font-semibold">{ORDER_STATUS_LABEL[o.status]}</span>

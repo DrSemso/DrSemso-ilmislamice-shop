@@ -1,7 +1,7 @@
 import { getCategories } from "@/lib/data";
 import { shop } from "@/shop.config";
 import { HeaderClient } from "./header-client";
-import { CurrencySwitch } from "./currency-switch";
+import { ThemeSwitch } from "./theme-switch";
 
 export async function Header() {
   const categories = await getCategories();
@@ -16,7 +16,7 @@ export async function Header() {
               {a}
             </span>
           ))}
-          <CurrencySwitch className="absolute right-4 top-1/2 -translate-y-1/2 sm:right-6 lg:right-8" />
+          <ThemeSwitch className="absolute right-3 top-1/2 -translate-y-1/2 sm:right-5 lg:right-7" />
         </div>
       </div>
       <HeaderClient subcats={subcats.map(({ name, slug }) => ({ name, slug }))} />

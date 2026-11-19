@@ -16,7 +16,7 @@ export default async function Page() {
       <ul className="mt-10 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
         {publishers.map((p) => (
           <li key={p.id}>
-            <Link href={`/izdavaci/${p.slug}`} className="flex items-center justify-between gap-4 border border-line bg-white/60 p-6 transition hover:border-ink hover:bg-white">
+            <Link href={`/izdavaci/${p.slug}`} className="flex items-center justify-between gap-4 border border-line bg-card/60 p-6 transition hover:border-ink hover:bg-card">
               <span className="font-serif text-[20px] font-semibold">{p.name}</span>
               <span className="text-[13px] text-muted">{count(p.id)} naslova</span>
             </Link>

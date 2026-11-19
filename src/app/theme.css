@@ -12,4 +12,28 @@
   --on-dark: #f1ede4;    /* text on dark */
   --success: #2f6b4f;
   --danger: #a33a2c;
+  --card: #ffffff;       /* inputs, cards */
+  --btn: var(--dark);    /* primary button */
+  --on-btn: var(--on-dark);
+  color-scheme: light;
+}
+
+/* Dark mode: chosen with the sun/moon switch, or the phone's own setting when nothing was chosen. */
+html[data-theme="dark"] {
+  --paper: #141311;
+  --ink: #ece8df;
+  --muted: #a19b90;
+  --surface: #1e1d1a;
+  --surface-2: #2a2824;
+  --line: #36332d;
+  --accent: #c4945a;
+  --accent-ink: #141311;
+  --dark: #0b0a09;
+  --on-dark: #ece8df;
+  --success: #6fbf96;
+  --danger: #e07a6a;
+  --card: #1b1a17;
+  --btn: #ece8df;
+  --on-btn: #141311;
+  color-scheme: dark;
 }

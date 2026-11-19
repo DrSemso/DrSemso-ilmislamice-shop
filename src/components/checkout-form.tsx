@@ -111,7 +111,7 @@ export function CheckoutForm({ defaults, loggedIn }: { defaults: Defaults; logge
         </fieldset>
         <fieldset>
           <legend className="mb-3 font-serif text-[22px] font-bold">Plaćanje</legend>
-          <label className="flex items-start gap-3 rounded-[3px] border border-ink bg-white p-4">
+          <label className="flex items-start gap-3 rounded-[3px] border border-ink bg-card p-4">
             <input type="radio" checked readOnly className="mt-1 accent-[var(--ink)]" />
             <span>
               <span className="font-semibold">Plaćanje pouzećem</span>

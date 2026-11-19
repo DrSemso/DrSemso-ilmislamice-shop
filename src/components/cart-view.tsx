@@ -51,7 +51,7 @@ export function CartView() {
                   <Link href={`/proizvod/${l.slug}`} className="font-semibold">{l.title}</Link>
                   <p className="text-[13px] text-muted tabular-nums"><Price value={l.price} /></p>
                 </div>
-                <div className="flex w-fit items-center rounded-[3px] border border-line bg-white">
+                <div className="flex w-fit items-center rounded-[3px] border border-line bg-card">
                   <button aria-label="Smanji" className="px-2.5 py-2 text-muted hover:text-ink" onClick={() => setQty(l.id, l.quantity - 1)}><Minus size={14} /></button>
                   <span className="w-8 text-center tabular-nums">{l.quantity}</span>
                   <button aria-label="Povećaj" className="px-2.5 py-2 text-muted hover:text-ink disabled:opacity-30" disabled={l.quantity >= l.maxQty} onClick={() => setQty(l.id, l.quantity + 1)}><Plus size={14} /></button>

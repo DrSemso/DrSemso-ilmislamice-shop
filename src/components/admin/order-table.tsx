@@ -31,7 +31,7 @@ export function OrderTable({ orders }: { orders: Order[] }) {
         </thead>
         <tbody className="divide-y divide-line">
           {orders.map((o) => (
-            <tr key={o.id} className="hover:bg-white">
+            <tr key={o.id} className="hover:bg-card">
               <td className="px-5 py-3 font-semibold tabular-nums"><Link href={`/admin/narudzbe/${o.id}`} className="link">#{o.number}</Link></td>
               <td className="px-5 py-3">{o.full_name}<span className="block text-[12.5px] text-muted">{o.phone}</span></td>
               <td className="px-5 py-3">{o.city}<span className="block text-[12.5px] text-muted">{o.country}</span></td>

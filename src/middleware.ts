@@ -5,11 +5,12 @@ import { CURRENCY_COOKIE } from "@/lib/currency-cookie";
 
 const SESSION_PATHS = ["/nalog", "/admin", "/korpa", "/narudzba"];
 
-// First visit: pick the price currency from the visitor's country (Vercel geo header). Serbia → dinars, else euros.
+// Price currency always follows the visitor's country (Vercel geo header): Serbia → dinars, else euros.
+// There is no manual switch, so the cookie is refreshed whenever the location says otherwise.
 function withCurrency(request: NextRequest, response: NextResponse) {
-  if (request.cookies.get(CURRENCY_COOKIE)) return response;
   const country = request.headers.get("x-vercel-ip-country");
   const cur = !country || country === "RS" ? "RSD" : "EUR";
+  if (request.cookies.get(CURRENCY_COOKIE)?.value === cur) return response;
   response.cookies.set(CURRENCY_COOKIE, cur, { path: "/", maxAge: 60 * 60 * 24 * 365, sameSite: "lax" });
   return response;
 }
