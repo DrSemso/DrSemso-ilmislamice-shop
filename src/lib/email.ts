@@ -21,7 +21,8 @@ export async function sendMail({ to, subject, html, replyTo }: Mail) {
       to: [to],
       subject,
       html,
-      ...(replyTo ? { reply_to: replyTo } : {}),
+      // Customers who hit "Reply" reach the shop inbox, not the no-reply sending address.
+      reply_to: replyTo ?? shop.contact.email,
     }),
   });
   if (!res.ok) console.error("email failed", res.status, await res.text().catch(() => ""));

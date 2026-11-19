@@ -16,9 +16,9 @@ export const shop = {
     homeCountry: "Srbija", // orders shipped here are charged in dinars, all other countries in euros
   },
   contact: {
-    email: "info@ilmislamice.com",
-    phone: "+387 00 000 000",
-    whatsapp: "38700000000", // digits only, used for wa.me links
+    email: "ilmislamiceshop@gmail.com",
+    phone: "+381 63 834 3738",
+    whatsapp: "381638343738", // digits only, used for wa.me links
     instagram: "https://www.instagram.com/ilmislamiceshop_knjige/",
     address: "",
   },
