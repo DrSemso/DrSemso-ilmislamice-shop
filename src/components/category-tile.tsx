@@ -11,11 +11,12 @@ const PATTERNS = [
 ];
 
 // Site palette tones (theme.css): paper surface, dark, bronze, stone.
+// Tile backgrounds are fixed colours, so their text uses fixed colours too (theme tokens flip in dark mode).
 const TONES = [
-  { bg: "#EDEBE6", line: "rgba(168,123,69,.38)", text: "text-ink", star: "text-accent/40", muted: "text-muted" },
-  { bg: "#171614", line: "rgba(168,123,69,.42)", text: "text-[#F3EFE6]", star: "text-accent/60", muted: "text-[#F3EFE6]/70" },
-  { bg: "#A87B45", line: "rgba(248,247,243,.30)", text: "text-ink", star: "text-paper/45", muted: "text-ink/70" },
-  { bg: "#E2DFD8", line: "rgba(23,22,20,.16)", text: "text-ink", star: "text-ink/20", muted: "text-muted" },
+  { bg: "#EDEBE6", line: "rgba(168,123,69,.38)", text: "text-[#141414]", star: "text-[#A87B45]/40", muted: "text-[#6B6B6B]" },
+  { bg: "#171614", line: "rgba(168,123,69,.42)", text: "text-[#F3EFE6]", star: "text-[#A87B45]/60", muted: "text-[#F3EFE6]/70" },
+  { bg: "#A87B45", line: "rgba(248,247,243,.30)", text: "text-[#141414]", star: "text-[#F8F7F3]/45", muted: "text-[#141414]/70" },
+  { bg: "#E2DFD8", line: "rgba(23,22,20,.16)", text: "text-[#141414]", star: "text-[#141414]/20", muted: "text-[#6B6B6B]" },
 ];
 
 export function CategoryTile({ name, href, index }: { name: string; href: string; index: number }) {
