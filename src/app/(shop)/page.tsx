@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { siteJsonLd } from "@/lib/seo";
-import { ArrowRight, BookOpen, Package, ShieldCheck, Truck } from "lucide-react";
+import { ArrowRight, BookOpen, Globe, Package, ShieldCheck, Truck } from "lucide-react";
 import { shop } from "@/shop.config";
 import { getCategories, getProducts } from "@/lib/data";
 import { ProductGrid } from "@/components/product-card";
@@ -45,6 +45,10 @@ export default async function Home() {
                 {shop.hero.secondary.label}
               </Link>
             </div>
+            <Link href="/dostava-i-placanje" className="mt-6 inline-flex items-center gap-2 text-[14px] font-medium text-ink/70 transition hover:text-accent">
+              <Globe size={16} className="text-accent" />
+              Dostava širom svijeta · plaćanje pouzećem
+            </Link>
           </div>
           {/* Mobile: a faint watermark behind the text (keeps the hero short). Desktop: the full emblem with books. */}
           <div
