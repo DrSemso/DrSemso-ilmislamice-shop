@@ -25,6 +25,8 @@ html {
   -webkit-font-smoothing: antialiased;
 }
 body {
+  /* Safety net: nothing may push the page sideways on phones. */
+  overflow-x: clip;
   font-family: var(--font-sans);
   font-size: 15px;
   line-height: 1.6;

@@ -1,3 +1,4 @@
+import type React from "react";
 import Link from "next/link";
 import { getCategories, getProducts, getPublishers, type ProductQuery, type ProductSort } from "@/lib/data";
 import { ProductGrid } from "./product-card";
@@ -131,21 +132,68 @@ export async function Catalog(props: CatalogProps) {
             </div>
           )}
           {pages > 1 && (
-            <nav aria-label="Stranice" className="mt-14 flex justify-center gap-1.5">
-              {Array.from({ length: pages }, (_, i) => i + 1).map((n) => (
-                <Link
-                  key={n}
-                  href={href({ strana: n > 1 ? String(n) : undefined })}
-                  aria-current={n === page ? "page" : undefined}
-                  className={`grid h-10 w-10 place-items-center border text-[14px] tabular-nums ${n === page ? "border-ink bg-ink text-paper" : "border-line hover:border-ink"}`}
-                >
-                  {n}
-                </Link>
-              ))}
+            <nav aria-label="Stranice" className="mt-14 flex items-center justify-center gap-1.5 text-[14px] tabular-nums">
+              <PageLink n={page - 1} disabled={page === 1} href={href} label="Prethodna stranica" wide>
+                <span aria-hidden>‹</span>
+                <span className="sm:hidden">Nazad</span>
+              </PageLink>
+              <span className="px-3 text-muted sm:hidden">
+                {page} / {pages}
+              </span>
+              {pageWindow(page, pages).map((n, i) =>
+                n === null ? (
+                  <span key={`gap-${i}`} className="hidden w-6 text-center text-muted sm:inline">…</span>
+                ) : (
+                  <span key={n} className="hidden sm:inline">
+                    <PageLink n={n} current={n === page} href={href} label={`Stranica ${n}`}>{n}</PageLink>
+                  </span>
+                ),
+              )}
+              <PageLink n={page + 1} disabled={page === pages} href={href} label="Sljedeća stranica" wide>
+                <span className="sm:hidden">Dalje</span>
+                <span aria-hidden>›</span>
+              </PageLink>
             </nav>
           )}
         </div>
       </div>
     </div>
+  );
+}
+
+/** 1 … 4 5 [6] 7 8 … 47 — first, last and two either side of the current page. */
+function pageWindow(page: number, pages: number): (number | null)[] {
+  const keep = new Set([1, pages, page - 2, page - 1, page, page + 1, page + 2].filter((n) => n >= 1 && n <= pages));
+  const out: (number | null)[] = [];
+  let prev = 0;
+  for (const n of [...keep].sort((a, b) => a - b)) {
+    if (n - prev === 2) out.push(n - 1);
+    else if (n - prev > 2) out.push(null);
+    out.push(n);
+    prev = n;
+  }
+  return out;
+}
+
+function PageLink(props: {
+  n: number;
+  href: (patch: Record<string, string | undefined>) => string;
+  label: string;
+  current?: boolean;
+  disabled?: boolean;
+  wide?: boolean;
+  children: React.ReactNode;
+}) {
+  const cls = `inline-flex h-10 items-center justify-center gap-1.5 rounded-full border ${props.wide ? "px-4 sm:w-10 sm:px-0" : "w-10"}`;
+  if (props.disabled) return <span aria-disabled className={`${cls} border-line text-muted/50`}>{props.children}</span>;
+  return (
+    <Link
+      href={props.href({ strana: props.n > 1 ? String(props.n) : undefined })}
+      aria-label={props.label}
+      aria-current={props.current ? "page" : undefined}
+      className={`${cls} ${props.current ? "border-ink bg-ink text-paper" : "border-line hover:border-ink"}`}
+    >
+      {props.children}
+    </Link>
   );
 }
