@@ -82,10 +82,10 @@ export default async function ProductPage({ params }: { params: Params }) {
         </ol>
       </nav>
 
-      <div className="mt-8 grid gap-10 md:grid-cols-[minmax(0,420px)_1fr] lg:gap-16">
+      <div className="mt-8 grid gap-10 md:grid-cols-[minmax(0,340px)_1fr] lg:gap-16">
         <div className="space-y-3">
-          <div className="relative mx-auto w-full max-w-[420px] shadow-[0_30px_50px_-25px_rgba(0,0,0,.45)]">
-            <BookCover product={product} sizes="(max-width: 768px) 90vw, 420px" priority />
+          <div className="relative mx-auto w-full max-w-[300px] md:max-w-[340px] shadow-[0_30px_50px_-25px_rgba(0,0,0,.45)]">
+            <BookCover product={product} sizes="340px" priority />
             {off > 0 && <span className="absolute left-3 top-3 bg-accent px-2 py-1 text-[12px] font-bold text-accent-ink">−{off}%</span>}
           </div>
           {product.images.length > 0 && (

@@ -24,7 +24,8 @@ export function BookCover({
   if (product.cover_url) {
     return (
       <div className="relative aspect-[2/3] w-full overflow-hidden bg-surface-2">
-        <Image src={product.cover_url} alt={product.title} fill sizes={sizes} priority={priority} className="object-cover" />
+        {/* Imported partner covers are already small webp files: serve them as-is so Next does not re-compress them. */}
+        <Image src={product.cover_url} alt={product.title} fill sizes={sizes} priority={priority} unoptimized={product.cover_url.includes("/kelimeh/")} className="object-cover" />
       </div>
     );
   }
