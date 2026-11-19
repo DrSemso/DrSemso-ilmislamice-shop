@@ -16,11 +16,37 @@ export function BookCover({
   product,
   sizes = "(max-width: 640px) 50vw, 25vw",
   priority = false,
+  natural = false,
 }: {
   product: Pick<Product, "title" | "cover_url" | "is_set"> & { author?: { name: string } | null };
   sizes?: string;
   priority?: boolean;
+  /** Show the whole cover at its own proportions (no crop) with a book-spine shade: used on the product page. */
+  natural?: boolean;
 }) {
+  if (product.cover_url && natural) {
+    return (
+      <div className="relative w-full overflow-hidden">
+        <Image
+          src={product.cover_url}
+          alt={product.title}
+          width={600}
+          height={844}
+          sizes={sizes}
+          priority={priority}
+          unoptimized={product.cover_url.includes("/kelimeh/")}
+          className="block h-auto w-full"
+        />
+        {/* Spine: a dark fold line and a soft highlight down the left edge, like a real hardback. */}
+        <span
+          aria-hidden
+          className="pointer-events-none absolute inset-y-0 left-0 w-[7%]"
+          style={{ background: "linear-gradient(90deg, rgba(0,0,0,.28) 0%, rgba(0,0,0,.05) 35%, rgba(255,255,255,.22) 55%, rgba(0,0,0,.12) 100%)" }}
+        />
+        <span aria-hidden className="pointer-events-none absolute inset-0 ring-1 ring-inset ring-black/10" />
+      </div>
+    );
+  }
   if (product.cover_url) {
     return (
       <div className="relative aspect-[2/3] w-full overflow-hidden bg-surface-2">

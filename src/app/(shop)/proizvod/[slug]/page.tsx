@@ -84,10 +84,10 @@ export default async function ProductPage({ params }: { params: Params }) {
 
       <div className="mt-6 grid gap-8 md:mt-8 md:grid-cols-[minmax(0,340px)_1fr] md:gap-10 lg:gap-16">
         <div className="space-y-3">
-          {/* Phones: a smaller cover on a soft stage, so the partner's 300px covers are not blown up to full screen width. */}
-          <div className="rounded-2xl bg-surface px-6 py-8 md:rounded-none md:bg-transparent md:p-0">
-            <div className="relative mx-auto w-full max-w-[190px] shadow-[0_24px_40px_-20px_rgba(0,0,0,.45)] md:max-w-[340px] md:shadow-[0_30px_50px_-25px_rgba(0,0,0,.45)]">
-              <BookCover product={product} sizes="(max-width: 767px) 190px, 340px" priority />
+          {/* Phones: a smaller cover on a quiet square stage, so the partner's 300px covers are not blown up. */}
+          <div className="flex aspect-square items-center justify-center bg-surface md:aspect-auto md:bg-transparent">
+            <div className="relative w-[48%] shadow-[0_18px_30px_-12px_rgba(0,0,0,.45),0_2px_6px_rgba(0,0,0,.12)] md:w-full md:max-w-[340px] md:shadow-[0_30px_50px_-25px_rgba(0,0,0,.45)]">
+              <BookCover product={product} sizes="(max-width: 767px) 200px, 340px" priority natural />
               {off > 0 && <span className="absolute left-3 top-3 bg-accent px-2 py-1 text-[12px] font-bold text-accent-ink">−{off}%</span>}
             </div>
           </div>
