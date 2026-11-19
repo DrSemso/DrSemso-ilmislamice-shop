@@ -51,7 +51,7 @@ export default async function Home() {
             className="pointer-events-none absolute -right-20 top-1/2 aspect-square w-[340px] -translate-y-1/2 opacity-[0.22] md:relative md:right-auto md:top-auto md:mx-auto md:w-full md:max-w-[460px] md:translate-y-0 md:opacity-100"
             aria-hidden="true"
           >
-            <StarMark size={460} ring={false} className="absolute inset-0 h-full w-full text-accent/30" />
+            <StarMark size={0} className="absolute inset-0 h-full w-full text-accent/45" />
             <p className="absolute inset-x-0 top-[17%] text-center font-arabic text-[clamp(44px,7vw,72px)] leading-none text-accent">
               {shop.arabicMark}
             </p>

@@ -29,7 +29,7 @@ export function siteJsonLd() {
       "@id": `${SITE_URL}/#store`,
       name: shop.name,
       url: SITE_URL,
-      logo: `${SITE_URL}/icon.svg`,
+      logo: `${SITE_URL}/brand/logo-badge.png`,
       description: shop.description,
       email: shop.contact.email,
       telephone: shop.contact.phone,

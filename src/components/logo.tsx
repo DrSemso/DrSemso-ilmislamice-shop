@@ -1,23 +1,35 @@
 import Link from "next/link";
 import { shop } from "@/shop.config";
 
-/** Eight-point star (rub el hizb) mark from the ILM logo, drawn as SVG. Swap for /public/logo.svg when the real file is available. */
-export function StarMark({ size = 34, className = "", ring = true }: { size?: number; className?: string; ring?: boolean }) {
+/**
+ * The frame of the ILM badge (outer outline and the gold arch frame), as a one-colour line drawing.
+ * Pass size={0} to size it with classes instead. Coloured with currentColor through a CSS mask, so `text-accent`, `text-paper/45` etc. work as before.
+ */
+export function StarMark({ size = 34, className = "" }: { size?: number; className?: string; ring?: boolean }) {
   return (
-    <svg width={size} height={size} viewBox="0 0 40 40" aria-hidden="true" className={className}>
-      <g fill="none" stroke="currentColor" strokeWidth="1.6">
-        <rect x="9" y="9" width="22" height="22" />
-        <rect x="9" y="9" width="22" height="22" transform="rotate(45 20 20)" />
-        {ring && <circle cx="20" cy="20" r="6.5" strokeWidth="1" />}
-      </g>
-    </svg>
+    <span
+      aria-hidden="true"
+      className={`inline-block bg-current ${className}`}
+      style={{
+        ...(size ? { width: size, height: size } : {}),
+        WebkitMaskImage: "url(/brand/frame-mask.png)",
+        maskImage: "url(/brand/frame-mask.png)",
+        WebkitMaskSize: "contain",
+        maskSize: "contain",
+        WebkitMaskRepeat: "no-repeat",
+        maskRepeat: "no-repeat",
+        WebkitMaskPosition: "center",
+        maskPosition: "center",
+      }}
+    />
   );
 }
 
 export function Logo({ light = false }: { light?: boolean }) {
   return (
     <Link href="/" className="group flex items-center gap-2.5" aria-label={`${shop.name}, početna`}>
-      <StarMark className="text-accent transition-transform duration-500 group-hover:rotate-45" />
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img src="/brand/logo-badge-160.png" alt="" width={46} height={46} className="h-[46px] w-[46px] shrink-0" />
       <span className="flex flex-col leading-none">
         <span className={`font-serif text-[26px] font-bold tracking-tight ${light ? "text-on-dark" : "text-ink"}`}>
           {shop.shortName}

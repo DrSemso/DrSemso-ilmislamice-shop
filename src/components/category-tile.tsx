@@ -4,8 +4,6 @@ import { StarMark } from "./logo";
 
 // Geometric (girih-style) line patterns, drawn as tiny SVG tiles and repeated as a background.
 const PATTERNS = [
-  // 8-point stars on a grid
-  (c: string) => `<svg xmlns='http://www.w3.org/2000/svg' width='44' height='44' viewBox='0 0 44 44'><g fill='none' stroke='${c}' stroke-width='1'><rect x='14' y='14' width='16' height='16'/><rect x='14' y='14' width='16' height='16' transform='rotate(45 22 22)'/><path d='M0 22h8.7M35.3 22H44M22 0v8.7M22 35.3V44'/></g></svg>`,
   // diamond lattice with dots
   (c: string) => `<svg xmlns='http://www.w3.org/2000/svg' width='36' height='36' viewBox='0 0 36 36'><g fill='none' stroke='${c}' stroke-width='1'><path d='M18 0 36 18 18 36 0 18Z'/><circle cx='18' cy='18' r='3'/></g></svg>`,
   // interlaced circles
