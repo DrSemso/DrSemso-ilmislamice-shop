@@ -18,7 +18,8 @@ export async function sendMail({ to, subject, html, replyTo }: Mail) {
     headers: { Authorization: `Bearer ${key}`, "Content-Type": "application/json" },
     body: JSON.stringify({
       from: process.env.EMAIL_FROM || `${shop.name} <onboarding@resend.dev>`,
-      to: [to],
+      // OWNER_EMAIL may list several addresses separated by commas.
+      to: to.split(",").map((a) => a.trim()).filter(Boolean),
       subject,
       html,
       // Customers who hit "Reply" reach the shop inbox, not the no-reply sending address.
