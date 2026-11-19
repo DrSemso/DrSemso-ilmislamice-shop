@@ -13,7 +13,7 @@ export default async function Page() {
   const p = session?.profile;
   // No saved address: guess the country from the visitor's location, or from the currency they picked.
   const geo = (await headers()).get("x-vercel-ip-country") ?? ((await cookies()).get(CURRENCY_COOKIE)?.value === "EUR" ? "BA" : "RS");
-  const geoCountry = { RS: "Srbija", BA: "Bosna i Hercegovina", ME: "Crna Gora", HR: "Hrvatska" }[geo] ?? "Drugo";
+  const geoCountry = ({ RS: "Srbija", BA: "Bosna i Hercegovina", ME: "Crna Gora", HR: "Hrvatska", XK: "Kosovo", MK: "Makedonija", SI: "Slovenija", AT: "Austrija", DE: "Njemačka", CH: "Švicarska" } as Record<string, string>)[geo] ?? "Drugo";
   const known = (c?: string | null) => (c && (shop.shipping.countries as readonly string[]).includes(c) ? c : null);
   return (
     <div className="container-x pt-10">

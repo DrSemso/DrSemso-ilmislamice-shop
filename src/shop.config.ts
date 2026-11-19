@@ -28,7 +28,7 @@ export const shop = {
     RSD: { price: 450 as number | null, freeFrom: 6000 },
     EUR: { price: null as number | null, freeFrom: 0 },
     byAgreementNote: "Cijenu dostave van Srbije javljamo Vam telefonom prije slanja, zavisi od toga gdje šaljemo.",
-    countries: ["Srbija", "Bosna i Hercegovina", "Crna Gora", "Hrvatska", "Drugo"],
+    countries: ["Srbija", "Bosna i Hercegovina", "Crna Gora", "Hrvatska", "Kosovo", "Makedonija", "Slovenija", "Austrija", "Njemačka", "Švicarska", "Drugo"],
     deliveryTime: "2 do 5 radnih dana",
   },
   announcements: [
