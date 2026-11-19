@@ -1,6 +1,6 @@
 // One-off catalog import from the partner shop kelimeh.org (Astro site, schema.org JSON-LD on every product page).
 // POST { offset, limit } with an admin's Supabase access token. Reads the partner sitemap, imports products
-// [offset, offset+limit): authors, publishers, category mapping, EUR price → dinars (× 120), cover copied to Storage.
+// [offset, offset+limit): authors, publishers, category mapping, EUR price → dinars (× 120), cover copied to Storage. Every book gets stock 10.
 import "jsr:@supabase/functions-js/edge-runtime.d.ts";
 import { createClient } from "jsr:@supabase/supabase-js@2";
 
@@ -22,6 +22,8 @@ map("sira", ["sira", "kazivanja-o-vjerovjesnicima", "ashabi-i-ucenjaci", "poslan
 map("kuran", ["kuran", "mushafi-i-prijevodi-kurana", "ucenje-kurana", "tefsir-i-tefsirska-nauka", "poruke-kurana"]);
 map("istorija", ["historija-islama", "historija-i-civilizacija-islama", "bosnjaci-bih-sandzak", "historija-bosnjaka", "kulturna-bastina"]);
 map("psihologija", ["psihologija", "sreca-i-motivacija", "psihologija-i-licni-razvoj"]);
+map("akida", ["vjerovanje-i-tevhid", "klasicna-djela-akaida", "akaid", "smrt-kabur-sudnji-dan", "smrt-i-ahiret", "siizam-sekte-i-pravci", "islamske-osnove", "dzini-sihr-rukja"]);
+map("za-djecu", ["price-za-djecu", "slikovnice", "bojanke-i-radne-sveske", "djecija-literatura", "mekteb-i-vjeronauka"]);
 
 const ENT: Record<string, string> = { amp: "&", lt: "<", gt: ">", quot: '"', apos: "'", nbsp: " ", hellip: "…", ndash: "–", mdash: "—", bdquo: "„", ldquo: "“", rdquo: "”", lsquo: "‘", rsquo: "’" };
 const decode = (s: string) =>
@@ -87,7 +89,19 @@ Deno.serve(async (req) => {
   }
   if (!allowed) return json({ error: "forbidden" }, 403);
 
-  const { offset = 0, limit = 10, onlyCount = false } = await req.json().catch(() => ({}));
+  const { offset = 0, limit = 10, onlyCount = false, recategorize } = await req.json().catch(() => ({}));
+
+  // { recategorize: { "<our category slug>": ["<product slug>", ...] } } moves already imported products.
+  if (recategorize) {
+    const moved: Record<string, number> = {};
+    for (const [cat, slugs] of Object.entries(recategorize as Record<string, string[]>)) {
+      const { data: c } = await db.from("categories").select("id").eq("slug", cat).single();
+      if (!c) return json({ error: `unknown category ${cat}` }, 400);
+      const { data } = await db.from("products").update({ category_id: c.id }).in("slug", slugs).select("id");
+      moved[cat] = data?.length ?? 0;
+    }
+    return json({ moved });
+  }
   const sitemap = await fetch(`${SITE}/sitemap.xml`).then((r) => r.text());
   const urls = [...sitemap.matchAll(/<loc>([^<]+\/product\/[^<]+)<\/loc>/g)].map((m) => m[1]);
   if (onlyCount) return json({ total: urls.length });
@@ -125,7 +139,7 @@ Deno.serve(async (req) => {
         }
         const row = {
           slug: p.slug, title: p.title, description: p.description,
-          price: Math.round(p.eur * EUR_RATE), stock: p.inStock ? 10 : 0,
+          price: Math.round(p.eur * EUR_RATE), stock: 10, // shop keeps everything orderable; partner availability is ignored
           sku: p.sku, isbn: p.isbn, pages: p.pages, binding: p.binding, year: p.year, translator: p.translator,
           dimensions: p.dimensions, cover_url,
           category_id: catId(CAT[p.theirCat] ?? "ostalo"),
