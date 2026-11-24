@@ -4,18 +4,14 @@ import Link from "next/link";
 import { Minus, Plus, Trash2 } from "lucide-react";
 import { useCart } from "./cart";
 import { BookCover } from "./book-cover";
-import { convert, money, shippingFor, shippingLabel } from "@/lib/format";
-import { shop } from "@/shop.config";
+import { convert, shippingFor, shippingLabel } from "@/lib/format";
 import { ByCur, Dual, Price } from "./price";
+import { FreeShippingBar } from "./free-shipping-bar";
 
 export function CartView() {
   const { lines, subtotalIn, setQty, remove } = useCart();
   const sub = { RSD: subtotalIn("RSD"), EUR: subtotalIn("EUR") };
   const ship = { RSD: shippingFor(sub.RSD, "RSD"), EUR: shippingFor(sub.EUR, "EUR") };
-  const toFree = (cur: "RSD" | "EUR") => {
-    const left = shop.shipping[cur].freeFrom ? shop.shipping[cur].freeFrom - sub[cur] : 0;
-    return left > 0 ? `Dodajte još ${money(left, cur)} za besplatnu dostavu.` : null;
-  };
 
   if (!lines.length) {
     return (
@@ -69,12 +65,12 @@ export function CartView() {
 
       <aside className="h-fit space-y-4 bg-surface p-6 lg:sticky lg:top-36">
         <h2 className="font-serif text-[22px] font-bold">Pregled narudžbe</h2>
+        <div className="empty:hidden"><ByCur rsd={<FreeShippingBar subtotal={sub.RSD} cur="RSD" />} eur={<FreeShippingBar subtotal={sub.EUR} cur="EUR" />} /></div>
         <dl className="space-y-2 text-[15px]">
           <div className="flex justify-between"><dt>Knjige</dt><dd className="tabular-nums"><Dual rsd={sub.RSD} eur={sub.EUR} /></dd></div>
           <div className="flex justify-between"><dt>Dostava</dt><dd className="tabular-nums"><ByCur rsd={shippingLabel(ship.RSD, "RSD")} eur={shippingLabel(ship.EUR, "EUR")} /></dd></div>
           <div className="flex justify-between border-t border-line pt-3 text-[18px] font-bold"><dt>Ukupno</dt><dd className="text-right tabular-nums"><Dual rsd={sub.RSD + (ship.RSD ?? 0)} eur={sub.EUR + (ship.EUR ?? 0)} /><ByCur rsd={ship.RSD == null ? <span className="block text-[12px] font-normal text-muted">+ dostava</span> : null} eur={ship.EUR == null ? <span className="block text-[12px] font-normal text-muted">+ dostava</span> : null} /></dd></div>
         </dl>
-        <p className="text-[13px] text-muted empty:hidden"><ByCur rsd={toFree("RSD")} eur={toFree("EUR")} /></p>
         <p className="text-[13px] text-muted">Plaćanje pouzećem: iznos plaćate kuriru kad paket stigne.</p>
         <Link href="/narudzba" className="btn btn-dark w-full py-3.5 text-[15px]">Nastavi na narudžbu</Link>
       </aside>

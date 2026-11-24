@@ -8,6 +8,7 @@ import { BookCover } from "./book-cover";
 import { convert, currencyForCountry, giftWrapFor, money, shippingFor, shippingLabel } from "@/lib/format";
 import { shop } from "@/shop.config";
 import { placeOrder, type OrderInput } from "@/app/(shop)/narudzba/actions";
+import { FreeShippingBar } from "./free-shipping-bar";
 
 type Defaults = Pick<OrderInput, "email" | "full_name" | "phone" | "address" | "city" | "postal_code" | "country">;
 
@@ -140,6 +141,7 @@ export function CheckoutForm({ defaults, loggedIn }: { defaults: Defaults; logge
 
       <aside className="h-fit space-y-5 bg-surface p-6 lg:sticky lg:top-36">
         <h2 className="font-serif text-[22px] font-bold">Vaša narudžba</h2>
+        <FreeShippingBar subtotal={subtotal} cur={cur} />
         <ul className="space-y-3">
           {lines.map((l) => (
             <li key={l.id} className="flex items-center gap-3 text-[14px]">
