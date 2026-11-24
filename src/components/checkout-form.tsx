@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 import { useCart } from "./cart";
 import { BookCover } from "./book-cover";
-import { convert, currencyForCountry, money, shippingFor, shippingLabel } from "@/lib/format";
+import { convert, currencyForCountry, giftWrapFor, money, shippingFor, shippingLabel } from "@/lib/format";
 import { shop } from "@/shop.config";
 import { placeOrder, type OrderInput } from "@/app/(shop)/narudzba/actions";
 
@@ -21,6 +21,9 @@ export function CheckoutForm({ defaults, loggedIn }: { defaults: Defaults; logge
   const cur = currencyForCountry(country);
   const subtotal = subtotalIn(cur);
   const shipping = shippingFor(subtotal, cur);
+  const [gift, setGift] = useState(false);
+  const giftPrice = gift ? giftWrapFor(cur) : 0;
+  const total = subtotal + (shipping ?? 0) + giftPrice;
 
   if (!lines.length) {
     return (
@@ -44,6 +47,7 @@ export function CheckoutForm({ defaults, loggedIn }: { defaults: Defaults; logge
       country: String(f.get("country") ?? ""),
       note: String(f.get("note") ?? ""),
       save: f.get("save") === "on",
+      giftWrap: gift,
       lines: lines.map((l) => ({ id: l.id, quantity: l.quantity })),
     };
     setError(null);
@@ -110,6 +114,19 @@ export function CheckoutForm({ defaults, loggedIn }: { defaults: Defaults; logge
           )}
         </fieldset>
         <fieldset>
+          <legend className="mb-3 font-serif text-[22px] font-bold">Poklon</legend>
+          <label className={`flex cursor-pointer items-start gap-3 rounded-[3px] border bg-card p-4 transition ${gift ? "border-ink" : "border-line hover:border-ink/40"}`}>
+            <input type="checkbox" name="gift_wrap" checked={gift} onChange={(e) => setGift(e.target.checked)} className="mt-1 h-4 w-4 accent-[var(--accent)]" />
+            <span className="flex-1">
+              <span className="flex flex-wrap justify-between gap-2 font-semibold">
+                <span>{shop.giftWrap.label}</span>
+                <span className="tabular-nums">+ {money(giftWrapFor(cur), cur)}</span>
+              </span>
+              <span className="block text-[14px] text-muted">{shop.giftWrap.text}</span>
+            </span>
+          </label>
+        </fieldset>
+        <fieldset>
           <legend className="mb-3 font-serif text-[22px] font-bold">Plaćanje</legend>
           <label className="flex items-start gap-3 rounded-[3px] border border-ink bg-card p-4">
             <input type="radio" checked readOnly className="mt-1 accent-[var(--ink)]" />
@@ -137,7 +154,8 @@ export function CheckoutForm({ defaults, loggedIn }: { defaults: Defaults; logge
         <dl className="space-y-2 border-t border-line pt-4 text-[15px]">
           <div className="flex justify-between"><dt>Knjige</dt><dd className="tabular-nums">{money(subtotal, cur)}</dd></div>
           <div className="flex justify-between"><dt>Dostava</dt><dd className="tabular-nums">{shippingLabel(shipping, cur)}</dd></div>
-          <div className="flex justify-between border-t border-line pt-3 text-[18px] font-bold"><dt>Za plaćanje pouzećem</dt><dd className="text-right tabular-nums">{money(subtotal + (shipping ?? 0), cur)}{shipping == null && <span className="block text-[12px] font-normal text-muted">+ dostava</span>}</dd></div>
+          {gift && <div className="flex justify-between"><dt>Poklon pakovanje</dt><dd className="tabular-nums">{money(giftPrice, cur)}</dd></div>}
+          <div className="flex justify-between border-t border-line pt-3 text-[18px] font-bold"><dt>Za plaćanje pouzećem</dt><dd className="text-right tabular-nums">{money(total, cur)}{shipping == null && <span className="block text-[12px] font-normal text-muted">+ dostava</span>}</dd></div>
         </dl>
         <p className="text-[12.5px] text-muted">
           {cur === "RSD" ? "Za dostavu u Srbiji plaćate u dinarima." : `Za dostavu van Srbije plaćate u eurima. ${shop.shipping.byAgreementNote}`}

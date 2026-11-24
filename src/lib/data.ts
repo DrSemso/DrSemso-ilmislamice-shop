@@ -182,3 +182,13 @@ export async function getProductSlugs(): Promise<{ slug: string; updated_at: str
   if (error) throw error;
   return data ?? [];
 }
+
+/** Number of active books per author id. */
+export const getAuthorBookCounts = cache(async (): Promise<Record<string, number>> => {
+  const rows = isDemo
+    ? demoProducts().filter((p) => p.active).map((p) => ({ author_id: p.author_id }))
+    : ((await createSupabasePublic().from("products").select("author_id").eq("active", true).not("author_id", "is", null).range(0, 9999)).data ?? []);
+  const counts: Record<string, number> = {};
+  rows.forEach((r) => r.author_id && (counts[r.author_id] = (counts[r.author_id] ?? 0) + 1));
+  return counts;
+});

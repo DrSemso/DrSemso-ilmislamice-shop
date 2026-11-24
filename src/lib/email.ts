@@ -54,6 +54,7 @@ function itemsTable(order: Order, items: Pick<OrderItem, "title" | "price" | "qu
     .join("");
   return `<table width="100%" cellpadding="0" cellspacing="0" style="font-size:14px">${rows}
 <tr><td style="padding:8px 0;color:#6b6b6b">Dostava</td><td style="padding:8px 0;text-align:right;color:#6b6b6b">${shippingLabel(order.shipping == null ? null : Number(order.shipping), order.currency)}</td></tr>
+${order.gift_wrap ? `<tr><td style="padding:8px 0;color:#6b6b6b">Poklon pakovanje</td><td style="padding:8px 0;text-align:right;color:#6b6b6b">${money(Number(order.gift_wrap), order.currency)}</td></tr>` : ""}
 <tr><td style="padding:8px 0;font-weight:bold">Ukupno za plaćanje pouzećem</td><td style="padding:8px 0;text-align:right;font-weight:bold">${money(order.total, order.currency)}${order.shipping == null ? " + dostava" : ""}</td></tr></table>${order.shipping == null ? `<p style="color:#6b6b6b;font-size:14px">${shop.shipping.byAgreementNote}</p>` : ""}`;
 }
 

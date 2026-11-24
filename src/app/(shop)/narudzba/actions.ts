@@ -3,7 +3,7 @@
 import { isDemo } from "@/lib/env";
 import { getSession } from "@/lib/auth";
 import { createSupabaseAdmin } from "@/lib/supabase/server";
-import { convert, currencyForCountry, shippingFor } from "@/lib/format";
+import { convert, currencyForCountry, giftWrapFor, shippingFor } from "@/lib/format";
 import { sendOrderEmails } from "@/lib/email";
 import { shop } from "@/shop.config";
 import type { Order } from "@/lib/types";
@@ -18,6 +18,7 @@ export type OrderInput = {
   country: string;
   note: string;
   save: boolean;
+  giftWrap?: boolean;
   lines: { id: string; quantity: number }[];
 };
 
@@ -74,11 +75,13 @@ export async function placeOrder(input: OrderInput): Promise<OrderResult> {
 
   const subtotal = Math.round(items.reduce((s, i) => s + i.price * i.quantity, 0) * 100) / 100;
   const shipping = shippingFor(subtotal, currency);
+  const gift_wrap = input.giftWrap ? giftWrapFor(currency) : null;
+  const total = Math.round((subtotal + (shipping ?? 0) + (gift_wrap ?? 0)) * 100) / 100;
   const session = await getSession();
 
   const { data: order, error: oErr } = await db
     .from("orders")
-    .insert({ ...v, note: v.note || null, user_id: session?.user.id ?? null, subtotal, shipping, total: subtotal + (shipping ?? 0), currency })
+    .insert({ ...v, note: v.note || null, user_id: session?.user.id ?? null, subtotal, shipping, gift_wrap, total, currency })
     .select("*")
     .single();
   if (oErr || !order) return { ok: false, error: "Narudžba nije poslana, pokušajte ponovo." };
@@ -97,7 +100,7 @@ export async function placeOrder(input: OrderInput): Promise<OrderResult> {
   }
 
   try {
-    await sendOrderEmails({ ...(order as Order), subtotal, shipping, total: subtotal + (shipping ?? 0) }, items);
+    await sendOrderEmails({ ...(order as Order), subtotal, shipping, gift_wrap, total }, items);
   } catch (e) {
     console.error("order email", e);
   }

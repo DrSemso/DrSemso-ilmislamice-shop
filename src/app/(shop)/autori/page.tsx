@@ -1,12 +1,14 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { getAuthors } from "@/lib/data";
+import { getAuthorBookCounts, getAuthors } from "@/lib/data";
 
 export const metadata: Metadata = { title: "Autori", alternates: { canonical: "/autori" } };
 export const revalidate = 300;
 
 export default async function Page() {
-  const authors = await getAuthors();
+  const [authors, counts] = await Promise.all([getAuthors(), getAuthorBookCounts()]);
+  const featured = authors.filter((a) => a.is_featured).sort((a, b) => (counts[b.id] ?? 0) - (counts[a.id] ?? 0));
+  const books = (n: number) => (n === 1 ? "1 knjiga" : n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % 100 > 14) ? `${n} knjige` : `${n} knjiga`);
   const groups = new Map<string, typeof authors>();
   [...authors]
     .sort((a, b) => a.name.localeCompare(b.name, "bs"))
@@ -18,6 +20,27 @@ export default async function Page() {
     <div className="container-x pt-10">
       <p className="eyebrow">Ponuda</p>
       <h1 className="mt-2 font-serif text-[clamp(32px,4.5vw,48px)] font-bold">Autori</h1>
+      {featured.length > 0 && (
+        <section aria-labelledby="poznati" className="mt-8">
+          <h2 id="poznati" className="eyebrow mb-4">Poznati autori</h2>
+          <ul className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
+            {featured.map((a) => (
+              <li key={a.id}>
+                <Link href={`/autori/${a.slug}`} className="group flex h-full items-center gap-4 border border-line bg-card p-4 transition hover:-translate-y-0.5 hover:border-accent">
+                  <span aria-hidden className="grid h-12 w-12 shrink-0 place-items-center rounded-full bg-accent/15 font-serif text-[20px] font-bold text-accent">
+                    {a.name.replace(/^(dr\.?|mr\.?|prof\.?)\s+/i, "")[0]}
+                  </span>
+                  <span className="min-w-0">
+                    <span className="block font-serif text-[17px] font-semibold leading-snug group-hover:text-accent">{a.name}</span>
+                    <span className="text-[13px] text-muted">{books(counts[a.id] ?? 0)}</span>
+                  </span>
+                </Link>
+              </li>
+            ))}
+          </ul>
+          <h2 className="eyebrow mb-0 mt-10">Svi autori</h2>
+        </section>
+      )}
       <nav aria-label="Slova" className="mt-6 flex flex-wrap gap-1.5">
         {[...groups.keys()].map((l) => (
           <a key={l} href={`#slovo-${l}`} className="grid h-9 w-9 place-items-center border border-line text-[14px] font-semibold hover:border-ink">{l}</a>

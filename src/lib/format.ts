@@ -41,7 +41,12 @@ export function shippingFor(subtotal: number, cur: Currency): number | null {
   return rule.price;
 }
 
-/** "450 din", "Besplatna" or "Po dogovoru". */
+/** Gift wrapping price in the given currency. */
+export function giftWrapFor(cur: Currency) {
+  return shop.giftWrap[cur];
+}
+
+/** "600 din", "Besplatna" or "Po dogovoru". */
 export function shippingLabel(n: number | null, cur: Currency) {
   if (n == null) return "Po dogovoru";
   return n === 0 ? "Besplatna" : money(n, cur);

@@ -21,6 +21,7 @@ export type Author = {
   slug: string;
   bio: string | null;
   photo_url: string | null;
+  is_featured?: boolean;
 };
 
 export type Product = {
@@ -70,6 +71,8 @@ export type Order = {
   subtotal: number;
   /** null = shipping price by agreement (not included in total). */
   shipping: number | null;
+  /** Gift wrapping price in the order's currency; null = no gift wrapping. Included in total. */
+  gift_wrap?: number | null;
   total: number;
   /** Currency the order is charged in (amounts on the order and its items are in it). */
   currency: "RSD" | "EUR";
