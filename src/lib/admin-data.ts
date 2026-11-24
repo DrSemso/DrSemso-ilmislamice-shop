@@ -31,7 +31,7 @@ export const DEMO_ORDERS: Order[] = [
   {
     id: "00000000-0000-4000-a000-000000001000", number: 1000, user_id: null, email: "emir@primjer.rs", full_name: "Emir Ljajić",
     phone: "+381 64 000 000", address: "28. novembra 10", city: "Novi Pazar", postal_code: "36300", country: "Srbija",
-    note: null, subtotal: 4600, shipping: 450, total: 5050, currency: "RSD", payment_method: "pouzece", status: "poslana",
+    note: null, subtotal: 4600, shipping: 600, gift_wrap: 400, total: 5600, currency: "RSD", payment_method: "pouzece", status: "poslana",
     tracking_number: "PE123456789", created_at: new Date(Date.now() - 86400e3 * 2).toISOString(),
     order_items: [{ id: "i3", order_id: "", product_id: null, title: "Set: Temelji vjere", price: 4600, quantity: 1 }],
   },

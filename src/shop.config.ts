@@ -25,11 +25,18 @@ export const shop = {
   shipping: {
     // Courier price per currency, in that currency's own units. freeFrom: free shipping above this subtotal; 0 disables.
     // price null = "po dogovoru": the shop calls the customer with the shipping cost (depends on where they order from).
-    RSD: { price: 450 as number | null, freeFrom: 6000 },
+    RSD: { price: 600 as number | null, freeFrom: 6000 },
     EUR: { price: null as number | null, freeFrom: 0 },
     byAgreementNote: "Cijenu dostave van Srbije javljamo Vam telefonom prije slanja, zavisi od toga gdje šaljemo.",
     countries: ["Srbija", "Bosna i Hercegovina", "Crna Gora", "Hrvatska", "Kosovo", "Makedonija", "Slovenija", "Austrija", "Njemačka", "Švicarska", "Drugo"],
     deliveryTime: "2 do 5 radnih dana",
+  },
+  // Optional gift wrapping at checkout, priced per currency (in that currency's own units).
+  giftWrap: {
+    RSD: 400,
+    EUR: 3.5,
+    label: "Zapakuj kao poklon",
+    text: "Knjige zapakujemo u poklon papir, spremne za darivanje.",
   },
   announcements: [
     "Plaćanje pouzećem, plaćate kad knjiga stigne",
@@ -69,7 +76,7 @@ export const shop = {
     },
     {
       q: "Koliko košta dostava?",
-      a: "U Srbiji dostava košta 450 din, a iznad 6.000 din je besplatna. Za ostale zemlje cijena dostave je po dogovoru: nakon narudžbe Vas zovemo i kažemo koliko košta, zavisi odakle naručujete.",
+      a: "U Srbiji dostava košta 600 din, a iznad 6.000 din je besplatna. Za ostale zemlje cijena dostave je po dogovoru: nakon narudžbe Vas zovemo i kažemo koliko košta, zavisi odakle naručujete.",
     },
     {
       q: "Da li dostavljate u moju zemlju?",

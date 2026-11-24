@@ -10,6 +10,7 @@ export type EntityRow = {
   description?: string | null;
   parent_id?: string | null;
   sort?: number;
+  featured?: boolean;
   count: number;
 };
 
@@ -56,6 +57,12 @@ function EntityForm({ kind, row, parents, save }: { kind: Props["kind"]; row?: E
         <label htmlFor={`e-desc-${id}`} className="label">{LABELS[kind].desc}</label>
         <textarea id={`e-desc-${id}`} name="description" rows={2} defaultValue={row?.description ?? ""} className="input" />
       </div>
+      {kind === "authors" && (
+        <label className="flex items-center gap-2 text-[14px] sm:col-span-2">
+          <input type="checkbox" name="is_featured" defaultChecked={row?.featured} className="h-4 w-4 accent-[var(--accent)]" />
+          Poznat autor (prikazuje se na vrhu stranice Autori)
+        </label>
+      )}
       {kind === "categories" && (
         <div>
           <label htmlFor={`e-sort-${id}`} className="label">Redoslijed (manji broj ide prije)</label>
@@ -84,6 +91,7 @@ export function EntityManager({ kind, rows, parents, save, remove, publicPath }:
               <summary className="flex cursor-pointer list-none flex-wrap items-center justify-between gap-2 [&::-webkit-details-marker]:hidden">
                 <span className={`text-[15px] ${r.parent_id && kind === "categories" ? "pl-6 text-ink/85" : "font-semibold"}`}>
                   {r.parent_id && kind === "categories" ? "↳ " : ""}{r.name}
+                  {r.featured && <span className="ml-2 rounded-full bg-accent/15 px-2 py-0.5 text-[12px] font-semibold text-accent">★ poznat</span>}
                 </span>
                 <span className="text-[13px] text-muted">{r.count} proizvoda · <span className="link">uredi</span></span>
               </summary>

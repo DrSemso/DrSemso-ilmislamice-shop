@@ -150,6 +150,7 @@ export async function saveEntity(table: Entity, _: FormState, f: FormData): Prom
     row.description = opt(f, "description");
   } else {
     row.bio = opt(f, "description");
+    row.is_featured = f.get("is_featured") === "on";
   }
   const db = createSupabaseAdmin();
   const { error } = id ? await db.from(table).update(row).eq("id", id) : await db.from(table).insert(row);

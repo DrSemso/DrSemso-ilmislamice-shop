@@ -32,6 +32,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                   </tr>
                 ))}
                 <tr><td className="py-2.5 text-muted" colSpan={2}>Dostava</td><td className="py-2.5 text-right tabular-nums">{shippingLabel(order.shipping == null ? null : Number(order.shipping), order.currency)}</td></tr>
+                {order.gift_wrap ? <tr className="font-semibold text-accent"><td className="py-2.5" colSpan={2}>🎁 Zapakovati kao poklon</td><td className="py-2.5 text-right tabular-nums">{money(Number(order.gift_wrap), order.currency)}</td></tr> : null}
                 <tr className="text-[16px] font-bold"><td className="py-3" colSpan={2}>{order.shipping == null ? "Naplatiti pouzećem (+ dogovorena dostava)" : "Naplatiti pouzećem"}</td><td className="py-3 text-right tabular-nums">{money(Number(order.total), order.currency)}</td></tr>
               </tbody>
             </table>
