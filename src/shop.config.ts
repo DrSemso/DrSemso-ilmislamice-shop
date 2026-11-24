@@ -41,6 +41,7 @@ export const shop = {
   announcements: [
     "Plaćanje pouzećem, plaćate kad knjiga stigne",
     "Dostava širom svijeta",
+    "Besplatna dostava u Srbiji iznad 7.000 din",
   ],
   nav: [
     { label: "Knjige", href: "/knjige" },
