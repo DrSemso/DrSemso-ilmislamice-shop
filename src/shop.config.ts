@@ -25,7 +25,7 @@ export const shop = {
   shipping: {
     // Courier price per currency, in that currency's own units. freeFrom: free shipping above this subtotal; 0 disables.
     // price null = "po dogovoru": the shop calls the customer with the shipping cost (depends on where they order from).
-    RSD: { price: 600 as number | null, freeFrom: 6000 },
+    RSD: { price: 600 as number | null, freeFrom: 7000 },
     EUR: { price: null as number | null, freeFrom: 0 },
     byAgreementNote: "Cijenu dostave van Srbije javljamo Vam telefonom prije slanja, zavisi od toga gdje šaljemo.",
     countries: ["Srbija", "Bosna i Hercegovina", "Crna Gora", "Hrvatska", "Kosovo", "Makedonija", "Slovenija", "Austrija", "Njemačka", "Švicarska", "Drugo"],
@@ -76,7 +76,7 @@ export const shop = {
     },
     {
       q: "Koliko košta dostava?",
-      a: "U Srbiji dostava košta 600 din, a iznad 6.000 din je besplatna. Za ostale zemlje cijena dostave je po dogovoru: nakon narudžbe Vas zovemo i kažemo koliko košta, zavisi odakle naručujete.",
+      a: "U Srbiji dostava košta 600 din, a iznad 7.000 din je besplatna. Za ostale zemlje cijena dostave je po dogovoru: nakon narudžbe Vas zovemo i kažemo koliko košta, zavisi odakle naručujete.",
     },
     {
       q: "Da li dostavljate u moju zemlju?",

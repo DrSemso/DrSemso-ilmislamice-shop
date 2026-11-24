@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { getAuthorBookCounts, getAuthors } from "@/lib/data";
+import { AuthorSearch } from "@/components/author-search";
 
 export const metadata: Metadata = { title: "Autori", alternates: { canonical: "/autori" } };
 export const revalidate = 300;
@@ -20,6 +21,7 @@ export default async function Page() {
     <div className="container-x pt-10">
       <p className="eyebrow">Ponuda</p>
       <h1 className="mt-2 font-serif text-[clamp(32px,4.5vw,48px)] font-bold">Autori</h1>
+      <AuthorSearch authors={authors.map((a) => ({ slug: a.slug, name: a.name, books: books(counts[a.id] ?? 0) }))} />
       {featured.length > 0 && (
         <section aria-labelledby="poznati" className="mt-8">
           <h2 id="poznati" className="eyebrow mb-4">Poznati autori</h2>
