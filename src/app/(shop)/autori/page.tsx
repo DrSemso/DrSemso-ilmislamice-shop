@@ -28,12 +28,12 @@ export default async function Page() {
           <ul className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
             {featured.map((a) => (
               <li key={a.id}>
-                <Link href={`/autori/${a.slug}`} className="group flex h-full items-center gap-4 border border-line bg-card p-4 transition hover:-translate-y-0.5 hover:border-accent">
-                  <span aria-hidden className="grid h-12 w-12 shrink-0 place-items-center rounded-full bg-accent/15 font-serif text-[20px] font-bold text-accent">
+                <Link href={`/autori/${a.slug}`} className="group flex h-full flex-col items-start gap-3 border border-line bg-card p-3.5 transition hover:-translate-y-0.5 hover:border-accent sm:flex-row sm:items-center sm:gap-4 sm:p-4">
+                  <span aria-hidden className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-accent/15 font-serif text-[17px] font-bold text-accent sm:h-12 sm:w-12 sm:text-[20px]">
                     {a.name.replace(/^(dr\.?|mr\.?|prof\.?)\s+/i, "")[0]}
                   </span>
-                  <span className="min-w-0">
-                    <span className="block font-serif text-[17px] font-semibold leading-snug group-hover:text-accent">{a.name}</span>
+                  <span className="min-w-0 max-w-full">
+                    <span className="block break-words font-serif text-[15.5px] font-semibold leading-snug group-hover:text-accent sm:text-[17px]">{a.name}</span>
                     <span className="text-[13px] text-muted">{books(counts[a.id] ?? 0)}</span>
                   </span>
                 </Link>
@@ -43,9 +43,9 @@ export default async function Page() {
           <h2 className="eyebrow mb-0 mt-10">Svi autori</h2>
         </section>
       )}
-      <nav aria-label="Slova" className="mt-6 flex flex-wrap gap-1.5">
+      <nav aria-label="Slova" className="mt-6 grid grid-cols-[repeat(auto-fill,minmax(36px,1fr))] gap-1.5 sm:flex sm:flex-wrap">
         {[...groups.keys()].map((l) => (
-          <a key={l} href={`#slovo-${l}`} className="grid h-9 w-9 place-items-center border border-line text-[14px] font-semibold hover:border-ink">{l}</a>
+          <a key={l} href={`#slovo-${l}`} className="grid h-9 place-items-center border border-line text-[14px] font-semibold hover:border-ink sm:w-9">{l}</a>
         ))}
       </nav>
       <div className="mt-10 columns-1 gap-10 sm:columns-2 lg:columns-3">
